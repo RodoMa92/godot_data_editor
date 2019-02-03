@@ -8,3 +8,4 @@ export(String, MULTILINE) var description = ""
 
 func _init(id).(id):
 	pass
+

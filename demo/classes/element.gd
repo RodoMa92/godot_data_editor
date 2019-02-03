@@ -6,3 +6,4 @@ export(Texture) var image = null
 
 func _init(id).(id):
 	pass
+

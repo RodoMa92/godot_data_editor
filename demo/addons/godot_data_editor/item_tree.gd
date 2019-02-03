@@ -280,10 +280,10 @@ func _on_ClassContextMenu_item_pressed(index):
 func _on_Tree_item_rmb_selected(pos):
 	var is_leaf = get_selected_item() != null
 	if is_leaf:
-		instance_context_menu.set_pos(get_global_mouse_pos())
+		instance_context_menu.set_position(get_global_mouse_position())
 		instance_context_menu.popup()
 	else:
-		class_context_menu.set_pos(get_global_mouse_pos())
+		class_context_menu.set_position(get_global_mouse_position())
 		class_context_menu.popup()	
 	
 			
@@ -298,3 +298,4 @@ func _on_DeleteItemDialog_confirmed():
 
 
 #TODO: Proper memory management?
+

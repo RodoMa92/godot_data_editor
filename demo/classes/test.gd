@@ -8,3 +8,4 @@ export(Color) var your_color_property = Color(1,0,1)
 
 func _init(id).(id):
 	pass
+

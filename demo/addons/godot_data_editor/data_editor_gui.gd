@@ -419,3 +419,4 @@ func log_text(text):
 	file.store_line(old_text + date + text)
 
 
+

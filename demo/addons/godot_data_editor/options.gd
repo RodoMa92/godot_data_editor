@@ -188,3 +188,4 @@ func _on_EncryptCheckBox_button_down():
 
 func _on_SanitizeIdsCheckBox_button_down():
 	sanitize_ids_check_box.set_text(str(!sanitize_ids_check_box.is_pressed()))
+

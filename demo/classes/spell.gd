@@ -12,3 +12,4 @@ export(Sample) var sound = null
 func _init(id).(id):
 	pass
 	
+

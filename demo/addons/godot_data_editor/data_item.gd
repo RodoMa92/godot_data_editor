@@ -53,3 +53,4 @@ func update_property(property, value):
 				
 func _init(id):
 	self._id = id
+

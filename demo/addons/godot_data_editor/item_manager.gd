@@ -184,7 +184,7 @@ func load_binary_item(item_class, file_name):
 	var item = classes[item_class].new(id)
 	if status == OK:
 		# Load all the variables
-		while file.get_pos() < file.get_len():
+		while file.get_position() < file.get_len():
 			var property_name = str(file.get_var())
 
 			var value = file.get_var()
@@ -347,7 +347,7 @@ func delete_item(item):
 	var directory = Directory.new()
 	# TODO: Check why items[item._class].erase(item) doesn't work
 	var items_of_class = items[item._class]			
-	var status = directory.remove(path)
+	var status = directory.remove_and_collide(path)
 	load_manager()
 
 		
@@ -418,7 +418,7 @@ func duplicate_item(item, id, display_name, overwrite = true):
 func rename_item(item, new_id):
 	new_id = sanitize_string(new_id)
 	var directory = Directory.new()
-	directory.remove(get_item_path(item))
+	directory.remove_and_collide(get_item_path(item))
 	if item._id == item._display_name:
 		item._display_name = new_id
 	item._id = new_id
@@ -457,16 +457,16 @@ func delete_class(item_class):
 		var file_name = directory.get_next()
 		while (file_name != ""):
 			if not directory.current_is_dir():
-				directory.remove(path + "/" + file_name)
+				directory.remove_and_collide(path + "/" + file_name)
 			file_name = directory.get_next()
 		pass
-	directory.remove(path)
+	directory.remove_and_collide(path)
 	classes.erase(item_class)
 	class_names.erase(item_class)
 	items.erase(item_class)
 	
-	directory.remove(config_class_directory + "/" + item_class + ".gd")
-	directory.remove(config_class_directory + "/" + item_class + ".png")
+	directory.remove_and_collide(config_class_directory + "/" + item_class + ".gd")
+	directory.remove_and_collide(config_class_directory + "/" + item_class + ".png")
 
 func create_class(name, icon_path):
 	# Check if the classes folder already exists. If not, create it-
@@ -571,11 +571,11 @@ func rename_extension_of_all_items(new_extension, serializer):
 			var new_item_path = original_item_path.replace("." + config_extension, "." + new_extension)
 			if serializer == config_serializer:
 				directory.rename(original_item_path, new_item_path)
-				directory.remove(original_item_path)
+				directory.remove_and_collide(original_item_path)
 				load_config()
 				save_all_items()
 			else:
-				directory.remove(original_item_path)
+				directory.remove_and_collide(original_item_path)
 				load_config()
 				save_all_items()
 	pass
@@ -587,7 +587,7 @@ func delete_and_resave(is_encrypted, password):
 		for id in items[item_class]:
 			var item = items[item_class][id]
 			var item_path = get_item_path(item)
-			directory.remove(item_path)
+			directory.remove_and_collide(item_path)
 		pass
 	pass
 	load_config()

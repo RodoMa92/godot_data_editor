@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/godot_data_editor/class_overview.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot_data_editor/style/light_gray_panel.tres" type="StyleBox" id=2]
@@ -6,158 +6,167 @@
 
 [node name="ClassOverview" type="PanelContainer"]
 
-anchor/right = 1
-anchor/bottom = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 3
-size_flags/vertical = 3
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 0.0
-script/script = ExtResource( 1 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
+script = ExtResource( 1 )
+mouse_filter = 0
 
 [node name="Panel" type="Panel" parent="."]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 7.0
-margin/top = 7.0
-margin/right = 1273.0
-margin/bottom = 593.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1273.0
+margin_bottom = 593.0
 custom_styles/panel = ExtResource( 2 )
+mouse_filter = 0
 
 [node name="Body" type="VBoxContainer" parent="Panel"]
 
-anchor/right = 1
-anchor/bottom = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
 focus/ignore_mouse = false
 focus/stop_mouse = false
-size_flags/horizontal = 3
-size_flags/vertical = 3
-margin/left = 10.0
-margin/top = 10.0
-margin/right = 10.0
-margin/bottom = 10.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 alignment = 0
+mouse_filter = 0
 
 [node name="ClassPropertiesLabel" type="Label" parent="Panel/Body"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = true
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 1246.0
-margin/bottom = 19.0
+size_flags_horizontal = 1
+size_flags_vertical = 0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1246.0
+margin_bottom = 19.0
 custom_fonts/font = ExtResource( 3 )
 text = "Static Class Properties"
 uppercase = true
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+mouse_filter = 1
 
 [node name="HSeparator" type="HSeparator" parent="Panel/Body"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 1246.0
-margin/bottom = 3.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1246.0
+margin_bottom = 3.0
+mouse_filter = 0
 
 [node name="Control" type="Control" parent="Panel/Body"]
 
-rect/min_size = Vector2( 0, 15 )
+rect_min_size = Vector2( 0, 15 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 1246.0
-margin/bottom = 15.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1246.0
+margin_bottom = 15.0
+mouse_filter = 0
 
 [node name="Scroll" type="ScrollContainer" parent="Panel/Body"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 3
-size_flags/vertical = 3
-margin/left = 0.0
-margin/top = 19.0
-margin/right = 1246.0
-margin/bottom = 566.0
-scroll/horizontal = true
-scroll/vertical = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+margin_left = 0.0
+margin_top = 19.0
+margin_right = 1246.0
+margin_bottom = 566.0
+scroll_horizontal_enabled = true
+scroll_vertical_enabled = true
+mouse_filter = 0
 
 [node name="Statics" type="VBoxContainer" parent="Panel/Body/Scroll"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = false
-size_flags/horizontal = 3
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 1246.0
-margin/bottom = 0.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1246.0
+margin_bottom = 0.0
 alignment = 0
+mouse_filter = 0
 
 [node name="NoStaticsPropertiesLabel" type="Label" parent="Panel/Body/Scroll/Statics"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = true
 focus/stop_mouse = true
-size_flags/horizontal = 3
-size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 1246.0
-margin/bottom = 14.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1246.0
+margin_bottom = 14.0
 text = "There are no static properties for this class. Click below to add one."
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+mouse_filter = 1
 
 [node name="AddStaticPropertyButton" type="Button" parent="Panel/Body/Scroll/Statics"]
 
-visibility/visible = false
+visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 0.0
-margin/top = 18.0
-margin/right = 1246.0
-margin/bottom = 38.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+margin_left = 0.0
+margin_top = 18.0
+margin_right = 1246.0
+margin_bottom = 38.0
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 text = "Add static property"
 flat = false
+mouse_filter = 0
 
 [node name="Label" type="Label" parent="Panel/Body"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 19.0
-margin/right = 1246.0
-margin/bottom = 33.0
+size_flags_horizontal = 1
+size_flags_vertical = 0
+margin_left = 0.0
+margin_top = 19.0
+margin_right = 1246.0
+margin_bottom = 33.0
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-
-
+mouse_filter = 1

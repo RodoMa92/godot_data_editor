@@ -113,7 +113,7 @@ func create_custom_editor_button(value):
 	return button
 	
 func open_custom_editor():
-	menu.set_pos(get_global_mouse_pos())
+	menu.set_position(get_global_mouse_position())
 	menu.get_children()[1].grab_focus()
 	menu.popup()
 
@@ -271,9 +271,9 @@ func create_custom_editor(amount, columns, label_w, strings, read_only = false):
 		else:
 			value_label[i].set_text("")
 			
-		value_editor[i].set_pos( Vector2( m+label_w+c*(w+m+label_w), m+r*(h+m) ))
+		value_editor[i].set_position( Vector2( m+label_w+c*(w+m+label_w), m+r*(h+m) ))
 		value_editor[i].set_size( Vector2( w, h ) )
-		value_label[i].set_pos( Vector2( m+c*(w+m+label_w), m+r*(h+m) ) )
+		value_label[i].set_position( Vector2( m+c*(w+m+label_w), m+r*(h+m) ) )
 		value_editor[i].set_editable(!read_only)
 
 	pass
@@ -316,8 +316,8 @@ func get_custom_editor_value(index):
 		elif index == 1: return value.y
 		else: return value.z
 	elif type == TYPE_RECT2:
-		if index == 0: return value.pos.x
-		elif index == 1: return value.pos.y
+		if index == 0: return value.position.x
+		elif index == 1: return value.position.y
 		elif index == 2: return value.size.x
 		else: return value.size.y
 	elif type == TYPE_QUAT:
@@ -355,12 +355,12 @@ func create_object_or_image():
 		var f = File.new()
 		if value != null and f.file_exists(value):
 			var texture = load(value)
-			var texture_frame = TextureFrame.new()
+			var texture_frame = TextureRect.new()
 			texture_frame.set_expand(true)
 			texture_frame.set_custom_minimum_size(Vector2(get_parent_area_size().y, get_parent_area_size().y))
 			texture_frame.set_texture(texture)
 			var texture_popup = Popup.new()
-			var texture_frame_full = TextureFrame.new()
+			var texture_frame_full = TextureRect.new()
 			texture_frame_full.set_texture(texture)
 			texture_popup.add_child(texture_frame_full)
 			texture_popup.set_size(texture.get_size())

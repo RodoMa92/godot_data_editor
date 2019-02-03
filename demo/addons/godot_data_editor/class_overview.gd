@@ -8,3 +8,4 @@ func _ready():
 
 func set_label(text):
 	get_node("Panel/Body/Label").set_text(text)
+

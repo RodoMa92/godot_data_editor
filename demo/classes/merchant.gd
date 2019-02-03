@@ -6,3 +6,4 @@ export(String) var greeting = ""
 
 func _init(id).(id):
 	pass
+
