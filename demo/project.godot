@@ -12,11 +12,21 @@ _global_script_classes=[  ]
 _global_script_class_icons={
 
 }
+debug_is_editor=false
 
 [application]
 
 config/name="demo"
+run/main_scene="res://addons/godot_data_editor/data_editor_gui.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+data="*res://addons/godot_data_editor/data.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "godot_data_editor" )
 
 [importer_defaults]
 

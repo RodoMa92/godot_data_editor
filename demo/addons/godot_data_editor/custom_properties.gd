@@ -20,7 +20,7 @@ signal custom_property_delete_requested(custom_property_id)
 
 func _ready():
 	pass
-	self.item_manager = Globals.get("item_manager")
+	self.item_manager = ProjectSettings.get("item_manager")
 		
 func build_properties(item):
 	self.item = item

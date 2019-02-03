@@ -1,6 +1,6 @@
 extends "res://addons/godot_data_editor/data_item.gd"
 
-export(String, "Armor Shop", "Weapon Shop", "Inn", "Travelling Salesman") var name = ""
+export(String, "Armor Shop", "Weapon Shop", "Inn", "Travelling Salesman") var merchantname = ""
 export(String) var greeting = ""
 
 

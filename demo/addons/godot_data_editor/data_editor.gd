@@ -11,21 +11,37 @@ signal data_item_class_opened(item_class)
 	
 func _enter_tree():	
 	OS.set_low_processor_usage_mode(true)
+	name = "Data Editor"
 	# Currently, adding the singleton automatically, does not work
 	#check_for_data_singleton()
 	check_plugin_settings()
 	gui = data_editor_class.instance()
-	get_editor_viewport().add_child(gui)
-	gui.set_area_as_parent_rect()
+	
+	gui.rect_min_size = Vector2(0, 500)
+	add_control_to_bottom_panel(gui, "Data Editor")
+	
+	#get_editor_interface().get_editor_viewport().add_child(gui)
+	#gui.set_anchors_preset(Control.PRESET_WIDE)
+	
+	#get_editor_interface().
+	#get_editor_interface().
+	#get_editor_interface().get_editor_viewport().add_
+	#gui.set_area_as_parent_rect()
+	
 	gui.hide()
 
 
 # Remove control and data singleton
 func _exit_tree():
 	OS.set_low_processor_usage_mode(false)
-	get_editor_viewport().remove_child(gui)
+
+	remove_control_from_bottom_panel(gui)
+
+	#get_editor_interface().get_editor_viewport().remove_child(gui)
+	
 	if gui:
 		gui.free()
+		
 	var config = ConfigFile.new()
 	#var status = config.load("res://engine.cfg")
 	#if status == OK:
@@ -34,15 +50,18 @@ func _exit_tree():
 	#		config.save("res://engine.cfg")
 			
 		# Check if the Classes and Data folders exist
-	Globals.clear("item_manager")
+	ProjectSettings.clear("item_manager")
+	ProjectSettings.save()
+	
+	
 	
 func _ready():
 	gui.connect("class_edit_requested", self, "edit_class", [])
-	Globals.set("debug_is_editor", true)
+	ProjectSettings.set("debug_is_editor", true)
 
 # Opens the selected class in the Script Editor
 func edit_class(item_class):
-	edit_resource(item_class)
+	get_editor_interface().edit_resource(item_class)
 	
 	
 # TODO: Maybe there is a way  to refresh the tree without restart?
@@ -88,8 +107,10 @@ func has_main_screen():
 # Virtual: 
 func make_visible(visible):
 	if gui and visible:
+		
 		gui.reload()
 		gui.show()
+		
 	elif gui:
 		gui.hide()
 		 

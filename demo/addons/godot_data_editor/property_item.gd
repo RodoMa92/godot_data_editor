@@ -82,7 +82,7 @@ func _ready():
 	elif type == TYPE_TRANSFORM:
 		control = create_custom_editor_button(value);
 		create_custom_editor(12, 4, 16, ["xx", "xy", "xz", "xo", "yx", "yy", "yz", "yo", "zx", "zy", "zz", "zo"])
-	elif type == TYPE_OBJECT or type == TYPE_IMAGE:
+	elif type == TYPE_OBJECT:# or type == TYPE_IMAGE:
 		create_object_or_image()
 	else:
 		control = get_not_yet_supported()
@@ -231,7 +231,7 @@ func create_color():
 	if typeof(value) == TYPE_STRING and value.find(","):
 		var split_color = value.split(",")
 		value = Color(split_color[0], split_color[1], split_color[2], split_color[3])
-	control.set_color(value)
+	control.set_pick_color(value)
 	control.connect("color_changed", self, "property_value_changed", [])
 
 func create_node_path():
@@ -351,7 +351,7 @@ func create_object_or_image():
 	object_type_line_edit.set_text(str(value))
 	object_type_line_edit.set_h_size_flags(SIZE_EXPAND_FILL)
 	object_type_line_edit.connect("text_changed", self, "property_value_changed", [])
-	if hint_text == "Texture" or type == TYPE_IMAGE:
+	if hint_text == "Texture":# or type == TYPE_IMAGE:
 		var f = File.new()
 		if value != null and f.file_exists(value):
 			var texture = load(value)
@@ -377,7 +377,7 @@ func create_object_or_image():
 	control.add_child(load_button)
 	
 	
-	if 	Globals.get("debug_is_editor"):		
+	if 	ProjectSettings.get("debug_is_editor"):		
 		dialog = EditorFileDialog.new()
 		dialog.set_access(EditorFileDialog.ACCESS_RESOURCES)
 		dialog.set_mode(EditorFileDialog.MODE_OPEN_FILE)

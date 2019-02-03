@@ -59,7 +59,7 @@ func _init():
 	item_manager = preload("item_manager.gd").new()			# This item_manager will add itself to the globals
 
 func _ready():	
-	Globals.set("debug_is_editor", false)
+	ProjectSettings.set("debug_is_editor", false)
 
 	
 	# Tree signals
@@ -222,7 +222,7 @@ func _on_ItemTree_on_new_item_created(new_item):
 
 func create_shortcut(keys):
 	var short_cut = ShortCut.new()
-	var input_event = InputEvent()
+	var input_event = InputEvent.new()
 	input_event.type = InputEvent.KEY
 	input_event.ID = keys
 	short_cut.set_shortcut(input_event)
@@ -230,7 +230,7 @@ func create_shortcut(keys):
 # TODO: Implement
 func warn_about_reload():
 	if item_manager.has_unsaved_items():
-		input_dialog.popup(self, "reload_confirmed", tr("Confirm reload"), tr("Some changes have not been saved. \nThey will be discarded if you proceed. Are you sure you want to perform this action?"))	
+		input_dialog.input_dialog_popup(self, "reload_confirmed", tr("Confirm reload"), tr("Some changes have not been saved. \nThey will be discarded if you proceed. Are you sure you want to perform this action?"))	
 
 
 func reload():
@@ -293,19 +293,19 @@ func _on_NewClassIconFileDialog_file_selected(path):
 # General handler for a lot of actions to centralize the GUI logic a bit
 func handle_actions(action, argument = ""):
 	if action == "add":
-		input_dialog.popup(self, "_on_add_item_confirmed", tr("New Item"), tr("Please enter an ID for and optionally a display name the new item"), tr("ID"), "", tr("Display Name (optional)"), "")
+		input_dialog.input_dialog_popup(self, "_on_add_item_confirmed", tr("New Item"), tr("Please enter an ID for and optionally a display name the new item"), tr("ID"), "", tr("Display Name (optional)"), "")
 	elif action == "rename":
 		if selected_item:
-			input_dialog.popup(self, "_on_rename_item_confirmed", tr("Rename Item"), tr("Please enter a new ID for this item."), "ID", selected_id)
+			input_dialog.input_dialog_popup(self, "_on_rename_item_confirmed", tr("Rename Item"), tr("Please enter a new ID for this item."), "ID", selected_id)
 		else:
-			input_dialog.popup(self, "_on_rename_class_confirmed", tr("Rename Class"), tr("Please enter a new name for this class. All pending changes will be discarded!"), "ID", selected_class)
+			input_dialog.input_dialog_popup(self, "_on_rename_class_confirmed", tr("Rename Class"), tr("Please enter a new name for this class. All pending changes will be discarded!"), "ID", selected_class)
 	elif action == "duplicate":
 		var new_display_name = ""
 		if selected_item._dirty:
-			input_dialog.popup(self, "item_duplication_failed", tr("Item duplication failed"), tr("Before duplicating this item, please first save it."))			
+			input_dialog.input_dialog_popup(self, "item_duplication_failed", tr("Item duplication failed"), tr("Before duplicating this item, please first save it."))			
 			return
 		selected_item._display_name = ""
-		input_dialog.popup(self, "_on_duplicate_confirmed", tr("Duplicate Item"), tr("Please enter a new ID for this item"), "ID", selected_id, tr("Display Name (optional)"), new_display_name)
+		input_dialog.input_dialog_popup(self, "_on_duplicate_confirmed", tr("Duplicate Item"), tr("Please enter a new ID for this item"), "ID", selected_id, tr("Display Name (optional)"), new_display_name)
 	elif action == "save":
 		item_manager.save_item(selected_item)
 		item_tree.load_tree()
@@ -321,9 +321,9 @@ func handle_actions(action, argument = ""):
 		_on_AddClassButton_button_down()			# TODO: Incorporate into dialog handling
 	elif action == "delete":
 		if selected_item:
-			input_dialog.popup(self, "_on_delete_item_confirmed", tr("Delete Item"), tr("Are you sure you want to delete this item?"))
+			input_dialog.input_dialog_popup(self, "_on_delete_item_confirmed", tr("Delete Item"), tr("Are you sure you want to delete this item?"))
 		else:
-			input_dialog.popup(self, "_on_delete_class_confirmed", tr("Delete Class"), tr("Are you sure you want to delete class along with all items?"))
+			input_dialog.input_dialog_popup(self, "_on_delete_class_confirmed", tr("Delete Class"), tr("Are you sure you want to delete class along with all items?"))
 	elif action == "options":
 		options_screen.popup_centered()
 	elif action == "edit_class":
@@ -333,7 +333,7 @@ func handle_actions(action, argument = ""):
 	elif action == "copy_get_item":
 		copy_get_item()
 	elif action == "change_display_name":
-		input_dialog.popup(self, "change_display_name", tr("Change Display Name"), tr("Please enter a display name for this item."), "Display Name", selected_item._display_name)
+		input_dialog.input_dialog_popup(self, "change_display_name", tr("Change Display Name"), tr("Please enter a display name for this item."), "Display Name", selected_item._display_name)
 	elif action == "add_custom_property":
 		new_custom_property_name.set_text("")
 		new_custom_property_dialog.popup_centered()

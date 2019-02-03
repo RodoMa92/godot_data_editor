@@ -28,7 +28,7 @@ var default_type_values = {
 	str(TYPE_BOOL): false,									# OK
 	str(TYPE_COLOR): Color(0,0,0),
 	str(TYPE_OBJECT): "res://",
-	str(TYPE_IMAGE): "res://",
+	#str(TYPE_IMAGE): "res://",
 	str(TYPE_INT): 0,
 	str(TYPE_NODE_PATH): @"",
 	str(TYPE_REAL): 0.0,
@@ -40,8 +40,8 @@ var default_type_values = {
 	str(TYPE_TRANSFORM): Transform(Vector3(0,0,0),Vector3(0,0,0),Vector3(0,0,0),Vector3(0,0,0))
 	}
 
-var type_names = {"STRING":TYPE_STRING, "BOOL":TYPE_BOOL, "COLOR":TYPE_COLOR, "OBJECT":TYPE_OBJECT, "IMAGE":TYPE_IMAGE, "INT":TYPE_INT, "NODE_PATH":TYPE_NODE_PATH, "REAL":TYPE_REAL, "RECT2":TYPE_RECT2, "VECTOR2":TYPE_VECTOR2, "VECTOR3":TYPE_VECTOR3, "PLANE":TYPE_PLANE, "QUAT":TYPE_QUAT, "TRANSFORM":TYPE_TRANSFORM }
-
+var type_names = {"STRING":TYPE_STRING, "BOOL":TYPE_BOOL, "COLOR":TYPE_COLOR, "OBJECT":TYPE_OBJECT, "INT":TYPE_INT, "NODE_PATH":TYPE_NODE_PATH, "REAL":TYPE_REAL, "RECT2":TYPE_RECT2, "VECTOR2":TYPE_VECTOR2, "VECTOR3":TYPE_VECTOR3, "PLANE":TYPE_PLANE, "QUAT":TYPE_QUAT, "TRANSFORM":TYPE_TRANSFORM }
+# "IMAGE":TYPE_IMAGE,
 
 func _init():
 	load_manager()
@@ -56,7 +56,7 @@ func load_manager():
 	set_up_item_folders()
 	load_items()
 	reload_unsaved_items()
-	Globals.set("item_manager", self)
+	ProjectSettings.set("item_manager", self)
 
 # Try to keep unsaved changes when (re)loading the item_manager
 var unsaved_items = []
@@ -111,7 +111,7 @@ func load_class_names():
 		directory.list_dir_begin()
 		var file_name = directory.get_next()
 		while (file_name != ""):
-			if file_name.extension() == "gd" and not directory.current_is_dir() and file_name != "data_item.gd" :
+			if file_name.get_extension() == "gd" and not directory.current_is_dir() and file_name != "data_item.gd" :
 				class_names.append(file_name.replace(".gd", ""))
 			file_name = directory.get_next()
 	class_names.sort()
@@ -142,7 +142,7 @@ func get_item_path(item):
 	return config_output_directory + "/" + item._class + "/" + item._id + "." + config_extension
 
 func get_full_path(item):
-	return Globals.globalize_path(config_output_directory + "/" + item._class + "/" + item._id + "." + config_extension)
+	return ProjectSettings.globalize_path(config_output_directory + "/" + item._class + "/" + item._id + "." + config_extension)
 #	return  config_output_directory.replace("res://", "") + "/" + item._class + "/" + item._id + "." + config_extension
 
 func load_items():
@@ -158,8 +158,8 @@ func load_items():
 		directory.list_dir_begin()
 		var file_name = directory.get_next()
 		while (file_name != ""):
-			if file_name.extension() == config_extension and not directory.current_is_dir() :
-				var id = file_name.basename()
+			if file_name.get_extension() == config_extension and not directory.current_is_dir() :
+				var id = file_name.get_basename()
 				if config_serializer == "json":
 					items[item_class][id] = load_json_item(item_class, file_name)
 				elif config_serializer == "binary":
@@ -174,7 +174,7 @@ func load_items():
 # Loads a single item stored in the binary format
 func load_binary_item(item_class, file_name):
 	var file = File.new()
-	var id = file_name.basename()
+	var id = file_name.get_basename()
 	var status = 0
 	if not config_encrypt:
 		file.open(config_output_directory + "/" + item_class + "/" + file_name, File.READ)
@@ -201,16 +201,14 @@ func load_binary_item(item_class, file_name):
 # Loads a single item stored in the json format
 func load_json_item(item_class, file_name):
 	var file = File.new()
-	var id = file_name.basename()
+	var id = file_name.get_basename()
 	var status = file.open(config_output_directory + "/" + item_class + "/" + file_name, File.READ)
 	var item = classes[item_class].new(id)
 	if status == OK:
 		var text = file.get_as_text()
-		var dict = {}
-		dict.parse_json(text)
+		var dict = parse_json(text)
 
 		for property_name in dict:
-
 			
 			if property_name == "_custom_properties":
 				var value = dict["_custom_properties"]
@@ -315,7 +313,7 @@ func save_json_item(item):
 				if property_name == "_custom_properties":
 					dict["_custom_properties"] = {}
 					for custom_property in value:
-						var type = value[custom_property][0]
+						type = value[custom_property][0]
 						var sanitized_value = sanitize_variant(value[custom_property][1], type)
 						dict["_custom_properties"][custom_property] =  [sanitized_value, type]
 					pass	
@@ -329,7 +327,7 @@ func save_json_item(item):
 	else:
 		#TODO: Handle
 		pass
-	file.store_string(dict.to_json())
+	file.store_string(to_json(dict))
 	file.close()
 
 
@@ -490,7 +488,7 @@ func create_class(name, icon_path):
 	var icon_resource = load(icon_path)
 	var icon_data = icon_resource.get_data()
 	if icon_data.get_width() <= 22 and icon_data.get_height() <= 22:
-		var directory = Directory.new()
+		directory = Directory.new()
 		var error = directory.copy(icon_path, config_class_directory + "/" + name + ".png")
 		if error != OK:
 			emit_signal("class_insertion_failed", tr("Could not copy icon"), tr("There was a problem while copying the icon. Was it already opened by another program?") +  "\nError code: " + str(error))
@@ -510,7 +508,7 @@ func create_class(name, icon_path):
 	class_source += "\tpass\n"
 	
 	var script_file = File.new()
-	var directory = Directory.new()
+	directory = Directory.new()
 	if not directory.dir_exists(config_class_directory):
 		directory.make_dir(config_class_directory)
 	
