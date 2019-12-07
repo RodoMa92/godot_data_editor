@@ -7,7 +7,7 @@ export(Texture) var icon = null
 export(int, 0, 9999) var base_damage = 0
 export(String, "One Enemy", "All Enemies", "One Player", "All Players") var target = "One Enemy" 
 export(PackedScene) var effect = null
-#export(AudioStreamSample) var sound = null
+export(AudioStreamSample) var sound = null
 
 func _init(id).(id):
 	pass

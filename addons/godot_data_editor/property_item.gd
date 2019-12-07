@@ -39,18 +39,14 @@ func initialize(property_name, type, value = null,  hint = 0, hint_text = "", ha
 	self.hint = hint
 	self.hint_text = hint_text
 	self.has_delete_button = has_delete
-		
-
 
 func _ready():	
 	# Label describing property
 	var property_label = Label.new()
 	property_label.set_text(property_name.capitalize())
-
 	# Split property hints
 	self.hint_array = hint_text.split(",")
 	self.number_of_hints = hint_array.size()
-	
 	##################################################
 	# For each type, one control is defined
 	##################################################
@@ -82,11 +78,11 @@ func _ready():
 	elif type == TYPE_TRANSFORM:
 		control = create_custom_editor_button(value);
 		create_custom_editor(12, 4, 16, ["xx", "xy", "xz", "xo", "yx", "yy", "yz", "yo", "zx", "zy", "zz", "zo"])
-	elif type == TYPE_OBJECT or type == TYPE_IMAGE:
+	elif type == TYPE_OBJECT: #or type == TYPE_IMAGE:
 		create_object_or_image()
 	else:
 		control = get_not_yet_supported()
-			
+	
 	control.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 	control.set_margin(MARGIN_LEFT, 200)
 	control.set_custom_minimum_size(Vector2(get_parent().get_parent().get_parent().get_size().x - 270, 0))
@@ -111,9 +107,9 @@ func create_custom_editor_button(value):
 	button.set_text(str(value))
 	button.connect("button_down", self, "open_custom_editor")
 	return button
-	
+
 func open_custom_editor():
-	menu.set_pos(get_global_mouse_pos())
+	menu.set_position(get_global_mouse_position())
 	menu.get_children()[1].grab_focus()
 	menu.popup()
 
@@ -132,18 +128,18 @@ func create_bool():
 func create_number():
 	if value == null:
 		value = 0
-				
+
 	if hint == PROPERTY_HINT_ENUM:
 		control = MenuButton.new()
 		for i in range(0, hint_array.size()):
 			control.get_popup().add_item(hint_array[i])
 		control.set_flat(false)
 		control.set_text(control.get_popup().get_item_text(value))
-		control.get_popup().connect("item_pressed", self, "int_enum_property_value_changed", [])
-		
+		control.get_popup().connect("id_pressed", self, "int_enum_property_value_changed", [])
+
 	elif hint == PROPERTY_HINT_EXP_EASING:
 		control = get_not_yet_supported()
-		
+
 	elif hint == PROPERTY_HINT_FLAGS:
 		control = get_not_yet_supported()
 	# Range or no hints at all
@@ -175,7 +171,6 @@ func create_number():
 		if number_of_hints >= 3:
 			if not hint_array[2].empty():
 				control_step = float(hint_array[2])
-		
 
 		control = SpinBox.new()
 		control.set_min(control_min)
@@ -185,8 +180,6 @@ func create_number():
 		control.get_line_edit().connect("text_changed", self, "property_value_changed", [])
 		control.connect("value_changed", self, "property_value_changed", [])
 
-		
-
 func create_string():
 	if hint == PROPERTY_HINT_ENUM:
 		control = MenuButton.new()
@@ -194,7 +187,7 @@ func create_string():
 			control.get_popup().add_item(hint_array[i])
 		control.set_flat(false)
 		control.set_text(str(value))
-		control.get_popup().connect("item_pressed", self, "string_enum_property_value_changed", [])
+		control.get_popup().connect("id_pressed", self, "string_enum_property_value_changed", [])
 	elif hint == PROPERTY_HINT_MULTILINE_TEXT:
 		# RABRABRAB
 		control = HBoxContainer.new()
@@ -231,7 +224,7 @@ func create_color():
 	if typeof(value) == TYPE_STRING and value.find(","):
 		var split_color = value.split(",")
 		value = Color(split_color[0], split_color[1], split_color[2], split_color[3])
-	control.set_color(value)
+	control.set_pick_color(value)
 	control.connect("color_changed", self, "property_value_changed", [])
 
 func create_node_path():
@@ -271,15 +264,12 @@ func create_custom_editor(amount, columns, label_w, strings, read_only = false):
 		else:
 			value_label[i].set_text("")
 			
-		value_editor[i].set_pos( Vector2( m+label_w+c*(w+m+label_w), m+r*(h+m) ))
+		value_editor[i].set_position( Vector2( m+label_w+c*(w+m+label_w), m+r*(h+m) ))
 		value_editor[i].set_size( Vector2( w, h ) )
-		value_label[i].set_pos( Vector2( m+c*(w+m+label_w), m+r*(h+m) ) )
+		value_label[i].set_position( Vector2( m+c*(w+m+label_w), m+r*(h+m) ) )
 		value_editor[i].set_editable(!read_only)
-
 	pass
-	
 	add_child(menu)
-	
 
 func custom_editor_value_applied():
 	# TODO: Validate 
@@ -287,7 +277,6 @@ func custom_editor_value_applied():
 	for line in value_editor:
 		var v = float(line.get_text())
 		va.append(v)
-	
 	var value = null
 	if type == TYPE_VECTOR2:
 		value = Vector2(va[0], va[1])
@@ -306,7 +295,7 @@ func custom_editor_value_applied():
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)
 		control.set_text(str(value))
-	
+
 func get_custom_editor_value(index):
 	if type == TYPE_VECTOR2:
 		if index == 0: return value.x
@@ -316,8 +305,8 @@ func get_custom_editor_value(index):
 		elif index == 1: return value.y
 		else: return value.z
 	elif type == TYPE_RECT2:
-		if index == 0: return value.pos.x
-		elif index == 1: return value.pos.y
+		if index == 0: return value.position.x
+		elif index == 1: return value.position.y
 		elif index == 2: return value.size.x
 		else: return value.size.y
 	elif type == TYPE_QUAT:
@@ -351,33 +340,30 @@ func create_object_or_image():
 	object_type_line_edit.set_text(str(value))
 	object_type_line_edit.set_h_size_flags(SIZE_EXPAND_FILL)
 	object_type_line_edit.connect("text_changed", self, "property_value_changed", [])
-	if hint_text == "Texture" or type == TYPE_IMAGE:
+	if hint_text == "Texture":# or type == TYPE_IMAGE:
 		var f = File.new()
 		if value != null and f.file_exists(value):
 			var texture = load(value)
-			var texture_frame = TextureFrame.new()
+			var texture_frame = TextureRect.new()
 			texture_frame.set_expand(true)
-			texture_frame.set_custom_minimum_size(Vector2(get_parent_area_size().y, get_parent_area_size().y))
+			texture_frame.set_custom_minimum_size(Vector2(32, 32))
 			texture_frame.set_texture(texture)
-			var texture_popup = Popup.new()
-			var texture_frame_full = TextureFrame.new()
-			texture_frame_full.set_texture(texture)
-			texture_popup.add_child(texture_frame_full)
-			texture_popup.set_size(texture.get_size())
-#					texture_frame.set_process_input(true)
-#					texture_frame.connect("input_event", self, "open_image", [])
+#			var texture_popup = Popup.new()
+#			var texture_frame_full = TextureRect.new()
+#			texture_frame_full.set_texture(texture)
+#			texture_popup.add_child(texture_frame_full)
+#			texture_popup.set_size(texture.get_size())
+#			texture_frame.set_process_input(true)
+#			texture_frame.connect("input_event", self, "open_image", [])
 			control.add_child(texture_frame)
-#					control.add_child(texture_popup)
-
+#			control.add_child(texture_popup)
 	control.add_child(object_type_line_edit)
-	
-	
+
 	var load_button = ToolButton.new()
 	load_button.set_button_icon(load_icon)
 	control.add_child(load_button)
 	
-	
-	if 	Globals.get("debug_is_editor"):		
+	if Engine.editor_hint:
 		dialog = EditorFileDialog.new()
 		dialog.set_access(EditorFileDialog.ACCESS_RESOURCES)
 		dialog.set_mode(EditorFileDialog.MODE_OPEN_FILE)
@@ -392,7 +378,6 @@ func create_object_or_image():
 			extension_array = ResourceLoader.get_recognized_extensions_for_type(resource_type)
 		else:
 			extension_array = hint_array
-
 		for extension in extension_array:
 #				if filter.begins_with("."):
 #					filter = "*" + extension
@@ -405,7 +390,6 @@ func create_object_or_image():
 		pass 
 		dialog.connect("file_selected", self, "fill_resource_name", [])
 		add_child(dialog)
-
 	
 	#.add_icon_item(get_icon("Load","EditorIcons"), "Load")
 
@@ -428,7 +412,7 @@ func fill_resource_name(resource_path):
 # Sets the label of the checkboxe's text to the value
 func set_checkbox_label(value):
 	control.set_text(str(value))
-	
+
 func property_value_changed(value):
 	if type == TYPE_INT:
 		value = int(value)
@@ -441,7 +425,6 @@ func property_value_changed(value):
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)	
 
-
 func text_edit_popup_closed():
 	var text_edit = popup.get_child(0)
 	var value = text_edit.get_text()
@@ -449,9 +432,7 @@ func text_edit_popup_closed():
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)
 		control.get_child(0).set_text(value)
-	
-	
-	
+
 func int_enum_property_value_changed(value):
 	control.set_text(control.get_popup().get_item_text(value))
 	if self.value != value:
@@ -467,4 +448,4 @@ func string_enum_property_value_changed(value):
 		
 
 func open_image(texture):
-	pass
+	print("Dovrei aprire un immagine")

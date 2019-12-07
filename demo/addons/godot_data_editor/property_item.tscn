@@ -28,4 +28,3 @@ icon = ExtResource( 2 )
 [node name="PopupMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
 margin_bottom = 20.0
-

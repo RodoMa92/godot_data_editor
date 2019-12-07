@@ -7,4 +7,3 @@ func warn(title, text):
 	popup_centered()
 	
 	# Probably this should be placed at get_base_control()
-

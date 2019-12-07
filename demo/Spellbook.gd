@@ -28,4 +28,3 @@ func _on_SpellList_item_selected( index ):
 	var element = data.get_item("element", spell.element)
 	get_node("RightVBox/Type").set_bbcode("[color=#" + element.color.to_html() + "]" + element.name + "[/color]")
 	get_node("RightVBox/BaseDamage").set_text("Base Damage: " + str(spell.base_damage))
-

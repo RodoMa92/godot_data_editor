@@ -6,8 +6,8 @@ var property_item_class = preload("property_item.tscn")
 var remove_icon = preload("icons/icon_remove.png")
 
 
-onready var custom_properties_box = 			get_node("Body/Scroll/CustomProperties")
-onready var no_custom_properties_label = get_node("Body/Scroll/CustomProperties/NoCustomPropertiesLabel")
+onready var custom_properties_box = $"Body/Scroll/CustomProperties"
+onready var no_custom_properties_label = $"Body/Scroll/CustomProperties/NoCustomPropertiesLabel"
 
 onready var item_manager =  null				# Item Manager, used to load, modify and save items
 
@@ -20,7 +20,7 @@ signal custom_property_delete_requested(custom_property_id)
 
 func _ready():
 	pass
-	self.item_manager = Globals.get("item_manager")
+	self.item_manager = ProjectSettings.get("item_manager")
 		
 func build_properties(item):
 	self.item = item

@@ -46,7 +46,7 @@ var type_names = {"STRING":TYPE_STRING, "BOOL":TYPE_BOOL, "COLOR":TYPE_COLOR, "O
 func _init():
 	load_manager()
 	
-	
+
 func load_manager():
 	store_unsaved_changes()
 	initialize_variables()
@@ -66,14 +66,12 @@ func store_unsaved_changes():
 			# Check for id to prevent invalid entries from showing up
 			if item and item.get("_id") and (item._dirty or not item._persistent):
 				unsaved_items.append(item)
-	
+
 # Create a duplicate of the unsaved item because this will not mess up changed properties
 func reload_unsaved_items():
 	for unsaved_item in unsaved_items:
-		print(unsaved_item._id)
 		duplicate_item(unsaved_item, unsaved_item._id, unsaved_item._display_name, true)
 #		new_item._dirty = true
-
 	pass
 	unsaved_items = []
 		
@@ -103,7 +101,6 @@ func load_config():
 	self.config_serializer = config.get_value("custom", "serializer")
 	self.config_extension = config.get_value("custom", "extension")
 
-
 func load_class_names():
 	class_names.clear()
 	var directory = Directory.new()
@@ -116,7 +113,6 @@ func load_class_names():
 			file_name = directory.get_next()
 	class_names.sort()
 
-
 # Loads the classes from disk
 # TODO: Check if there is an issue with the class and display a warning instead of crashing the whole plugin...
 func load_classes():
@@ -128,7 +124,6 @@ func load_classes():
 			emit_signal("class_is_invalid", item_class)
 			invalid_classes.append(item_class)			
 	pass
-
 
 # Creates the directories for the items if they do not yet exist
 func set_up_item_folders():
@@ -150,10 +145,8 @@ func load_items():
 	var directory = Directory.new()
 	for item_class in class_names:
 		items[item_class] = {}
-
 		if invalid_classes.has(item_class):
 			continue
-
 		directory.open(config_output_directory + "/" + item_class )
 		directory.list_dir_begin()
 		var file_name = directory.get_next()
@@ -170,7 +163,7 @@ func load_items():
 			file_name = directory.get_next()
 		pass
 	pass
-	
+
 # Loads a single item stored in the binary format
 func load_binary_item(item_class, file_name):
 	var file = File.new()
@@ -186,18 +179,16 @@ func load_binary_item(item_class, file_name):
 		# Load all the variables
 		while file.get_position() < file.get_len():
 			var property_name = str(file.get_var())
-
 			var value = file.get_var()
 			item.set(property_name, value)
 		pass
-
 		item._dirty = false
 		item._persistent = true
 	else:
 		pass			# TODO: Handle
 	file.close()
 	return item
-	
+
 # Loads a single item stored in the json format
 func load_json_item(item_class, file_name):
 	var file = File.new()
@@ -207,7 +198,6 @@ func load_json_item(item_class, file_name):
 	if status == OK:
 		var text = file.get_as_text()
 		var dict = parse_json(text)
-
 		for property_name in dict:
 			
 			if property_name == "_custom_properties":
@@ -231,7 +221,7 @@ func load_json_item(item_class, file_name):
 	else:
 		pass			# TODO: Handle
 	file.close()
-	return item		
+	return item
 
 # Handles some special cases of JSON deserialization, e.g. Color
 func parse_value(type, value):
@@ -250,8 +240,7 @@ func parse_value(type, value):
 		var split = value.replace("(", "").replace(")", "").split(",")
 		value = Transform(Vector3(split[0], split[1], split[2]), Vector3(split[3], split[4], split[5]), Vector3(split[6], split[7], split[8]), Vector3(split[9], split[10], split[11]))		
 	return value
-					
-	
+
 # Saves all items
 func save_all_items():
 	for item_class in items:
@@ -330,14 +319,12 @@ func save_json_item(item):
 	file.store_string(to_json(dict))
 	file.close()
 
-
 func sanitize_variant(value, type):
 	if type == TYPE_COLOR:
 		value = value.to_html()
 	elif type == TYPE_STRING:
 		value = value.json_escape()
 	return value
-
 
 # Deletes a single item
 func delete_item(item):
@@ -348,14 +335,12 @@ func delete_item(item):
 	var status = directory.remove_and_collide(path)
 	load_manager()
 
-		
 # Gets all items of a specific class
 func get_items(item_class):
 	if items.has(item_class):
 		return items[item_class]
 	else:
 		return null
-	
 
 # Gets a single item 
 func get_item(item_class, id):
@@ -363,7 +348,6 @@ func get_item(item_class, id):
 		return items[item_class][id]
 	else:
 		return null
-		
 
 # Creates a new item of a given class, adds it to the items dictionary and returns the newly created item
 func create_and_add_new_item(item_class, id, display_name):
@@ -409,7 +393,7 @@ func duplicate_item(item, id, display_name, overwrite = true):
 	items[new_item._class][new_item._id] = new_item
 	items[new_item._class][id].set_name(new_item._class + ":" + id)
 	return new_item
-	
+
 # Rename the item, delete the old entry, overwrite the id and save anew
 # TODO: Could it still be referenced/locked somewhere?
 # TODO: Check for duplicate ids?
@@ -441,10 +425,10 @@ func add_custom_property(item, name, type):
 		item._custom_properties[str(name)] = [type, default_type_values[str(type)]]
 		item._dirty = true
 		return true
-	
+
 func delete_custom_property(item, property_name):
 	item._custom_properties.erase(property_name)
-		
+
 func delete_class(item_class):
 	# Delete items
 	var directory = Directory.new()
@@ -516,14 +500,13 @@ func create_class(name, icon_path):
 	script_file.store_string(class_source)
 	script_file.close()
 	load_manager()
-	
-	
+
 func sanitize_string(string):
 	if config_sanitize_ids:
 		return string.replace(" ", "_").replace("\\", "_").replace("/", "_").replace(":", "_").replace("*", "_").replace("?", "_").replace("\"", "_").replace("<", "_").replace(">", "_").replace("|", "_").to_lower()
 	else:
 		return string
-		
+
 func rename_id_if_exists(item_class, id):
 	if not items[item_class].has(id):
 		return id
@@ -558,8 +541,7 @@ func rename_class(item_class, new_item_class):
 	directory.rename(config_class_directory + item_class + ".png", config_class_directory + new_item_class + ".png")
 	directory.rename(config_output_directory + "/" + item_class, config_output_directory + "/" + new_item_class)
 	load_manager()
-		
-		
+
 func rename_extension_of_all_items(new_extension, serializer):
 	var directory = Directory.new() 
 	for item_class in class_names:
@@ -577,7 +559,6 @@ func rename_extension_of_all_items(new_extension, serializer):
 				load_config()
 				save_all_items()
 	pass
-	
 
 func delete_and_resave(is_encrypted, password):
 	var directory = Directory.new() 
@@ -590,7 +571,7 @@ func delete_and_resave(is_encrypted, password):
 	pass
 	load_config()
 	save_all_items()
-	
+
 func has_unsaved_items():
 	for item_class in items:
 		for id in items[item_class]:

@@ -20,8 +20,6 @@ var _custom_properties = {}
 func _ready():
 	pass
 	
-	
-		
 func get_class():
 	if _class:
 		return _class

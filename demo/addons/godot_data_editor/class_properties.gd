@@ -3,8 +3,8 @@ extends Panel
 
 var property_item_class = preload("property_item.tscn")
 
-onready var class_properties_box = 			get_node("Body/Scroll/ClassProperties")
-onready var no_class_properties_label = 	get_node("Body/Scroll/ClassProperties/NoClassPropertiesLabel")
+onready var class_properties_box = 			$"Body/Scroll/ClassProperties"
+onready var no_class_properties_label = 	$"Body/Scroll/ClassProperties/NoClassPropertiesLabel"
 
 var item = null
 

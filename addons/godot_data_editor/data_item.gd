@@ -20,13 +20,11 @@ var _custom_properties = {}
 func _ready():
 	pass
 	
-	
-		
 func get_class():
 	if _class:
 		return _class
 	else:
-		_class = self.get_script().get_path().get_file().basename()
+		_class = self.get_script().get_path().get_file().get_basename()
 		return _class
 
 
@@ -46,10 +44,11 @@ func set_display_name(name):
 
 
 func update_property(property, value):
-	var data_singleton = Globals.get_singleton("data")
+	var data_singleton = ProjectSettings.get_singleton("data")
 	if data_singleton:
 		data_singleton.set_progress(_class, _id, property, value)
 
 				
 func _init(id):
 	self._id = id
+

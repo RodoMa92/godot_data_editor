@@ -5,10 +5,10 @@ extends Control
 var dummy_root = null
 
 
-onready var tree = get_node("Panel/VBox/Tree")								# The item tree
-onready var class_context_menu = get_node("ClassContextMenu")				# Context menu when right clicking on a class
-onready var instance_context_menu = get_node("InstanceContextMenu")			# Context menu when right clicking on an instance
-onready var filter_control = get_node("Panel/VBox/Margin/HBoxContainer/Filter")
+onready var tree = $"Panel/VBox/Tree"										# The item tree
+onready var class_context_menu = $"ClassContextMenu"						# Context menu when right clicking on a class
+onready var instance_context_menu = $"InstanceContextMenu"					# Context menu when right clicking on an instance
+onready var filter_control = $"Panel/VBox/Margin/HBoxContainer/Filter"
 
 var item_manager = null 				# Item Manager, used to load, modify and save items
 
@@ -38,13 +38,10 @@ func _ready():
 	tree.set_allow_rmb_select(true)
 	load_tree()
 
-	
 func load_tree(is_reload = false):
 	save_collapsed_state()
-
 	plugin_config = ConfigFile.new()
 	plugin_config.load("res://addons/godot_data_editor/plugin.cfg")
-
 	self.item_manager = ProjectSettings.get("item_manager")
 	tree_elements = {}
 	tree_roots = {}
@@ -52,7 +49,6 @@ func load_tree(is_reload = false):
 	last_selected_class = ""
 	last_selected = null
 	var tree_element_to_be_selected = null
-
 	# Store the class and name of the last selected item, in case the tree is reloaded
 	last_selected = tree.get_selected()
 	if last_selected:
@@ -62,10 +58,7 @@ func load_tree(is_reload = false):
 			else:
 				self.last_selected_id = null
 		self.last_selected_class = last_selected.get_meta("class")
-
-	
 	tree.clear()
-		
 	# Create the roots for each item class, e.g. actors, monsters, crystals...
 	dummy_root = tree.create_item()
 	tree_elements["_roots"] = {}
@@ -95,7 +88,7 @@ func load_tree(is_reload = false):
 		tree_element_to_be_selected = get_tree_item(last_selected_class, last_selected_id)
 	elif last_selected_class:
 		tree_element_to_be_selected = get_tree_item(last_selected_class)
-	elif tree.get_root().get_children():	
+	elif tree.get_root().get_children():
 		tree_element_to_be_selected = tree.get_root().get_children()
 	else:
 		tree_element_to_be_selected = null			# No elements to be selected
@@ -105,7 +98,6 @@ func load_tree(is_reload = false):
 	if tree_element_to_be_selected and not filter_control.has_focus():
 		tree.grab_focus()
 		tree_element_to_be_selected.select(0)
-
 	# Collapse all class tree items which were previously collapsed
 	restore_collapsed_state()
 
@@ -128,8 +120,6 @@ func select_first_element():
 		last_selected_class = last_selected._class
 	return last_selected
 
-
-
 # Creates a new tree item, optionally with an existing item
 func add_leaf(item, update_order):
 	var id = item._id
@@ -139,9 +129,7 @@ func add_leaf(item, update_order):
 	tree_item.set_selectable(0, true)
 	tree_item.set_meta("class", item_class)
 	tree_item.set_meta("item", item)
-	
 	tree_elements[item_class][id] = tree_item
-
 	# Don't order the tree in the beginning as the ids will already be sorted
 	if update_order:
 		# Move the items which come before in the alphabet to the top
@@ -162,7 +150,6 @@ func add_leaf(item, update_order):
 		tree_item.select(0)
 	return tree_item
 
-
 func set_tree_item_label_text(item, tree_item = null):
 	if tree_item == null:
 		tree_item = get_tree_item(item._class, item._id)
@@ -181,7 +168,6 @@ func get_selected_item_root():
 	else:
 		return selected
 
-
 # A tree element in the tree was selected (either class or item)
 func _on_Tree_cell_selected():
 	emit_signal("on_item_selected", get_selected_item(), get_selected_class()) 
@@ -192,12 +178,10 @@ func get_selected_item():
 		return selected.get_meta("item")
 	else:
 		return null
-		
 
 func get_selected_class():
 	return tree.get_selected().get_meta("class")
-		
-		
+
 func get_tree_item(item_class, id = ""):
 	if id != "":
 		if tree_elements.has(item_class) and tree_elements[item_class].has(id):
@@ -224,7 +208,7 @@ func select_class(item_class):
 func _on_Filter_text_changed( text ):
 	self.filter = text
 	load_tree()
-	
+
 # Saves the collapsed tree items
 func save_collapsed_state():
 	for item_class in tree_roots:
@@ -239,8 +223,6 @@ func restore_collapsed_state():
 			tree_roots[item_class].set_collapsed(true)
 	pass
 	collapsed_item_classes = []
-
-
 
 # Right click context menu on leafs
 # 0 = Add | 1 = Rename | 2 = Delete | 3 = Duplicate | 4 = Open
@@ -275,8 +257,6 @@ func _on_ClassContextMenu_item_pressed(index):
 	elif index == 2:
 		emit_signal("on_rename_pressed")
 
-
-
 func _on_Tree_item_rmb_selected(pos):
 	var is_leaf = get_selected_item() != null
 	if is_leaf:
@@ -285,8 +265,7 @@ func _on_Tree_item_rmb_selected(pos):
 	else:
 		class_context_menu.set_position(get_global_mouse_position())
 		class_context_menu.popup()	
-	
-			
+
 func _on_DeleteItemDialog_confirmed():
 	var selected_item = get_selected_item()
 	if selected_item != null:
@@ -294,8 +273,4 @@ func _on_DeleteItemDialog_confirmed():
 		load_tree()
 		
 
-
-
-
 #TODO: Proper memory management?
-

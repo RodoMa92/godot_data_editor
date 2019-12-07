@@ -8,13 +8,13 @@ var placeholder_2 = ""
 var caller = null
 var callback_method = ""
 
-onready var line_edit_1 = get_node("VBox/LineEdit1")
-onready var line_edit_2 = get_node("VBox/LineEdit2")
+onready var line_edit_1 = $"VBox/LineEdit1"
+onready var line_edit_2 = $"VBox/LineEdit2"
 
 
 #func _init(text, placerholder_1 = "", placeholder_2 = ""):
 
-func popup(caller, callback_method, title, text, placeholder_1 = "", default_text_1 = "", placeholder_2 = "", default_text_2 = ""):
+func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = "", default_text_1 = "", placeholder_2 = "", default_text_2 = ""):
 	self.caller = caller
 	self.callback_method = callback_method
 	self.placeholder_1 = placeholder_1
@@ -30,18 +30,16 @@ func popup(caller, callback_method, title, text, placeholder_1 = "", default_tex
 		line_edit_1.show()
 		line_edit_1.set_placeholder(placeholder_1)
 
-		
 	if placeholder_2 == "":
 		line_edit_2.hide()
 	else:
 		line_edit_2.show()
 		line_edit_2.set_placeholder(placeholder_2)
-
 	line_edit_1.set_text(default_text_1)
 	line_edit_2.set_text(default_text_2)
 	self.popup_centered()
 	
-	if not line_edit_1.is_hidden():
+	if line_edit_1.visible:
 		line_edit_1.grab_focus()
 
 func _on_ConfirmationDialog_confirmed():

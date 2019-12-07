@@ -6,46 +6,46 @@ var selected_id = null
 var selected_class = null
 
 
-onready var item_tree = get_node("VBox/Body/ItemTree")
-onready var id_label = get_node("VBox/Body/Content/VBox/Container/ItemIdLabel")
+onready var item_tree = $"VBox/Body/ItemTree"
+onready var id_label = $"VBox/Body/Content/VBox/Container/ItemIdLabel"
 
-onready var instance_details = get_node("VBox/Body/Content/VBox/InstanceDetails/")
-onready var class_properties = get_node("VBox/Body/Content/VBox/InstanceDetails/HBox/ClassProperties")
-onready var custom_properties = get_node("VBox/Body/Content/VBox/InstanceDetails/HBox/CustomProperties")
-onready var class_overview = get_node("VBox/Body/Content/VBox/ClassOverview")
-onready var no_classes = get_node("VBox/Body/Content/VBox/NoClasses")
+onready var instance_details = $"VBox/Body/Content/VBox/InstanceDetails/"
+onready var class_properties = $"VBox/Body/Content/VBox/InstanceDetails/HBox/ClassProperties"
+onready var custom_properties = $"VBox/Body/Content/VBox/InstanceDetails/HBox/CustomProperties"
+onready var class_overview = $"VBox/Body/Content/VBox/ClassOverview"
+onready var no_classes = $"VBox/Body/Content/VBox/NoClasses"
  
-#onready var last_modified_date = get_node("VBox/Body/Content/VBox/Container/GridContainer/LastModifiedDate")
-#onready var created_date = get_node("VBox/Body/Content/VBox/Container/GridContainer/CreatedDate")
+#onready var last_modified_date = $"VBox/Body/Content/VBox/Container/GridContainer/LastModifiedDate"
+#onready var created_date = $"VBox/Body/Content/VBox/Container/GridContainer/CreatedDate"
 
 
-onready var new_custom_property_dialog = get_node("NewCustomPropertyDialog")
-onready var new_custom_property_name = get_node("NewCustomPropertyDialog/LineEdit")
-onready var new_custom_property_type_options = get_node("NewCustomPropertyDialog/TypeOptions")
+onready var new_custom_property_dialog = $"NewCustomPropertyDialog"
+onready var new_custom_property_name = $"NewCustomPropertyDialog/LineEdit"
+onready var new_custom_property_type_options = $"NewCustomPropertyDialog/TypeOptions"
 
-onready var add_button = get_node("VBox/Head/Add")
-onready var delete_button = get_node("VBox/Head/Delete")
-onready var duplicate_button = get_node("VBox/Head/Duplicate")
-onready var change_display_name_button = get_node("VBox/Body/Content/VBox/Container/HBox/DisplayName")
-onready var rename_button = get_node("VBox/Head/Rename")
-onready var save_button = get_node("VBox/Head/Save")
-onready var save_all_button = get_node("VBox/Head/SaveAll")
+onready var add_button = $"VBox/Head/Add"
+onready var delete_button = $"VBox/Head/Delete"
+onready var duplicate_button = $"VBox/Head/Duplicate"
+onready var change_display_name_button = $"VBox/Body/Content/VBox/Container/HBox/DisplayName"
+onready var rename_button = $"VBox/Head/Rename"
+onready var save_button = $"VBox/Head/Save"
+onready var save_all_button = $"VBox/Head/SaveAll"
 
-onready var copy_id_button = get_node("VBox/Body/Content/VBox/Container/HBox/CopyId")
-onready var edit_class_button = get_node("VBox/Body/Content/VBox/Container/HBox/EditClass")
-onready var copy_get_item_button = get_node("VBox/Body/Content/VBox/Container/HBox/CopyGetItem")
+onready var copy_id_button = $"VBox/Body/Content/VBox/Container/HBox/CopyId"
+onready var edit_class_button = $"VBox/Body/Content/VBox/Container/HBox/EditClass"
+onready var copy_get_item_button = $"VBox/Body/Content/VBox/Container/HBox/CopyGetItem"
 
 # Dialogs
-onready var input_dialog = get_node("InputDialog")
+onready var input_dialog = $"InputDialog"
 
-onready var new_item_class_dialog = get_node("NewClassDialog")
-onready var new_item_class_name = get_node("NewClassDialog/ClassName")
-onready var new_item_class_icon = get_node("NewClassDialog/ClassIconPath")
-onready var new_item_class_icon_dialog = get_node("NewClassDialog/ClassIconFileDialog")
+onready var new_item_class_dialog = $"NewClassDialog"
+onready var new_item_class_name = $"NewClassDialog/ClassName"
+onready var new_item_class_icon = $"NewClassDialog/ClassIconPath"
+onready var new_item_class_icon_dialog = $"NewClassDialog/ClassIconFileDialog"
 
 
-onready var warn_dialog = get_node("WarnDialog")
-onready var options_screen = get_node("OptionsDialog")
+onready var warn_dialog = $"WarnDialog"
+onready var options_screen = $"OptionsDialog"
 
 var item_tree_class = preload("item_tree.tscn")
 #var active_element = null
@@ -60,7 +60,6 @@ func _init():
 
 func _ready():	
 	ProjectSettings.set("debug_is_editor", false)
-
 	
 	# Tree signals
 	item_tree.connect("on_new_item_pressed", self, "handle_actions", ["add"])
@@ -69,21 +68,21 @@ func _ready():
 	item_tree.connect("on_duplicate_pressed", self, "handle_actions", ["duplicate"])
 	item_tree.connect("on_item_selected", self, "change_item_context", [])
 	item_tree.connect("on_open", self, "open_item", [])
-		
+
 	custom_properties.connect("custom_property_add_requested", self, "handle_actions", ["add_custom_property"])
 	custom_properties.connect("new_custom_property_created", self, "handle_actions", ["add_custom_property"])
 	custom_properties.connect("custom_property_delete_requested", self, "delete_custom_property", [])
 	class_properties.connect("on_item_changed", self, "toggle_item_dirty_state", [])
-	
+
 	options_screen.connect("extension_changed", item_manager, "rename_extension_of_all_items", [])
 	options_screen.connect("encryption_changed", item_manager, "delete_and_resave", [])
-	
+
 	item_manager.connect("class_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_insertion_failed", self, "show_warning", [])
 	item_manager.connect("custom_property_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_duplication_failed", self, "show_warning", [])
 #	item_manager.connect("class_is_invalid", self, "show_warning", [])	
-	
+
 	# Add types to the custom property type dropdown
 	var type_names = item_manager.type_names.keys()
 	type_names.sort()
@@ -138,12 +137,11 @@ func change_item_context(selected_item, selected_class):
 	
 	if selected_class:
 		self.selected_class = selected_class
-
 			
 	# TODO: Move to method, clean up
 	var has_no_classes = item_manager.classes.size() == 0
 	if has_no_classes:
-		change_display_name_button.set_disabled(has_no_classes)		
+		change_display_name_button.set_disabled(has_no_classes)
 		duplicate_button.set_disabled(true)
 		save_button.set_disabled(true)
 		save_all_button.set_disabled(true)
@@ -158,8 +156,6 @@ func change_item_context(selected_item, selected_class):
 		instance_details.hide()
 		class_overview.hide()
 		id_label.set_text("No Classes")
-		
-		
 	# An item was selected
 	if selected_item:
 		# Context was lost, e.g. because of changes to the classes. Reload.
@@ -167,9 +163,8 @@ func change_item_context(selected_item, selected_class):
 			self.item_manager.load_manager()
 			self.item_tree.load_tree(true)
 			selected_item = item_tree.select_first_element()
-		
-		change_display_name_button.set_disabled(false)		
-		duplicate_button.set_disabled(false)		
+		change_display_name_button.set_disabled(false)
+		duplicate_button.set_disabled(false)
 		save_button.set_disabled(false)
 		save_all_button.set_disabled(false)
 		rename_button.set_disabled(false)
@@ -178,7 +173,6 @@ func change_item_context(selected_item, selected_class):
 		copy_id_button.set_disabled(false)
 		edit_class_button.set_disabled(false)
 		copy_get_item_button.set_disabled(false)
-
 		self.selected_item = selected_item
 		self.selected_id = selected_item._id
 		class_overview.hide()
@@ -188,7 +182,6 @@ func change_item_context(selected_item, selected_class):
 			id_label.set_text(selected_id)
 		else:
 			id_label.set_text(selected_item._display_name + " (" +  selected_id + ")")
-		
 		class_properties.build_properties(selected_item)
 		custom_properties.build_properties(selected_item)
 	# A class was selected
@@ -214,11 +207,8 @@ func change_item_context(selected_item, selected_class):
 		instance_details.hide()
 		no_classes.hide()
 
-
-
 func _on_ItemTree_on_new_item_created(new_item):
 	selected_item = new_item
-
 
 func create_shortcut(keys):
 	var short_cut = ShortCut.new()

@@ -3,22 +3,22 @@ extends AcceptDialog
 
 var config = null
 
-onready var serializer_label = get_node("Panel/GridContainer/SerializerLabel")
-onready var serializer_option = get_node("Panel/GridContainer/SerializerOption")
-onready var extension_label = get_node("Panel/GridContainer/ExtensionLabel")
-onready var extension_line_edit = get_node("Panel/GridContainer/ExtensionLineEdit")
-onready var encrypt_label = get_node("Panel/GridContainer/EncryptLabel")
-onready var encrypt_check_box = get_node("Panel/GridContainer/EncryptCheckBox")
-onready var password_label = get_node("Panel/GridContainer/PasswordLabel")
-onready var password_line_edit = get_node("Panel/GridContainer/PasswordLineEdit")
-onready var output_directory_label = get_node("Panel/GridContainer/OutputDirectoryLabel")
-onready var output_directory_line_edit = get_node("Panel/GridContainer/OutputDirectoryHBox/OutputDirectoryLineEdit")
-onready var class_directory_label = get_node("Panel/GridContainer/OutputDirectoryLabel")
-onready var class_directory_line_edit = get_node("Panel/GridContainer/ClassDirectoryHBox/ClassDirectoryLineEdit")
-onready var sanitize_ids_label = get_node("Panel/GridContainer/SanitizeIdsLabel")
-onready var sanitize_ids_check_box = get_node("Panel/GridContainer/SanitizeIdsCheckBox")
+onready var serializer_label = $"Panel/GridContainer/SerializerLabel"
+onready var serializer_option = $"Panel/GridContainer/SerializerOption"
+onready var extension_label = $"Panel/GridContainer/ExtensionLabel"
+onready var extension_line_edit = $"Panel/GridContainer/ExtensionLineEdit"
+onready var encrypt_label = $"Panel/GridContainer/EncryptLabel"
+onready var encrypt_check_box = $"Panel/GridContainer/EncryptCheckBox"
+onready var password_label = $"Panel/GridContainer/PasswordLabel"
+onready var password_line_edit = $"Panel/GridContainer/PasswordLineEdit"
+onready var output_directory_label = $"Panel/GridContainer/OutputDirectoryLabel"
+onready var output_directory_line_edit = $"Panel/GridContainer/OutputDirectoryHBox/OutputDirectoryLineEdit"
+onready var class_directory_label = $"Panel/GridContainer/OutputDirectoryLabel"
+onready var class_directory_line_edit = $"Panel/GridContainer/ClassDirectoryHBox/ClassDirectoryLineEdit"
+onready var sanitize_ids_label = $"Panel/GridContainer/SanitizeIdsLabel"
+onready var sanitize_ids_check_box = $"Panel/GridContainer/SanitizeIdsCheckBox"
 
-onready var warn_dialog = get_node("WarnDialog")
+onready var warn_dialog = $"WarnDialog"
 
 var extension = ""
 var serializer = ""
@@ -98,14 +98,11 @@ func _on_SerializerOption_item_selected(index):
 		encrypt_check_box.set_disabled(false)
 		password_line_edit.set_editable(true)
 
-
-
 func _on_Options_confirmed():
 	extract_values()
 	extension = extension.strip_edges()
 	if extension.begins_with("."):
 		extension = extension.replace(".", "")
-	
 	# TODO: Validate
 	var error_message = ""
 #	if self.serializer != "binary" or self.serializer != "json":
@@ -121,7 +118,6 @@ func _on_Options_confirmed():
 	var encryption_changed = false
 	if extension != config.get_value("custom", "extension") or serializer != config.get_value("custom", "serializer"):
 		extension_changed = true
-
 	if encrypt != config.get_value("custom", "encrypt") or password != config.get_value("custom", "password"):
 		encryption_changed = true
 
@@ -153,7 +149,7 @@ func extract_values():
 	password = password_line_edit.get_text()
 	output_directory = output_directory_line_edit.get_text()
 	sanitize_ids = sanitize_ids_check_box.is_pressed()
-	
+
 func _on_ClassDirectoryButton_button_down():
 	var dialog = EditorFileDialog.new()
 	dialog.set_mode(EditorFileDialog.MODE_OPEN_DIR)
@@ -164,7 +160,6 @@ func _on_ClassDirectoryButton_button_down():
 		get_node("EditorFileDialog").popup_centered()
 	dialog.popup_centered_ratio()
 
-
 func _on_OutputDirectoryButton_button_down():
 	var dialog = EditorFileDialog.new()
 	dialog.set_mode(EditorFileDialog.MODE_OPEN_DIR)
@@ -174,7 +169,7 @@ func _on_OutputDirectoryButton_button_down():
 	else:
 		get_node("EditorFileDialog").popup_centered()
 	dialog.popup_centered_ratio()
-		
+
 func set_class_directory(selected_directory):
 	class_directory = selected_directory
 	class_directory_line_edit.set_text(selected_directory)

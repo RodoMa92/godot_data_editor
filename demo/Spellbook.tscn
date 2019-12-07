@@ -1,171 +1,81 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spellbook.gd" type="Script" id=1]
 [ext_resource path="res://title_font.font" type="BitmapFont" id=2]
 
 [node name="Panel" type="Panel"]
-
 anchor_right = 1.0
 anchor_bottom = 1.0
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 1
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
 script = ExtResource( 1 )
-mouse_filter = 0
 
 [node name="LeftVBox" type="VBoxContainer" parent="."]
-
-focus/ignore_mouse = false
-focus/stop_mouse = false
-size_flags_horizontal = 1
-size_flags_vertical = 1
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 200.0
 margin_bottom = 600.0
-alignment = 0
 mouse_filter = 0
 
 [node name="Label" type="Label" parent="LeftVBox"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 0
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 200.0
 margin_bottom = 21.0
+mouse_filter = 1
+size_flags_vertical = 0
 custom_fonts/font = ExtResource( 2 )
 text = "Spellbook"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-mouse_filter = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="LeftVBox"]
-
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags_horizontal = 3
-size_flags_vertical = 3
-margin_left = 0.0
 margin_top = 25.0
 margin_right = 200.0
 margin_bottom = 600.0
-scroll_horizontal_enabled = true
-scroll_vertical_enabled = true
-mouse_filter = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="SpellList" type="ItemList" parent="LeftVBox/ScrollContainer"]
-
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags_horizontal = 3
-size_flags_vertical = 3
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 200.0
 margin_bottom = 575.0
-mouse_filter = 0
-
-[node name="RightVBox" type="VBoxContainer" parent="."]
-
-anchor_right = 1.0
-anchor_bottom = 1.0
-focus/ignore_mouse = false
-focus/stop_mouse = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="RightVBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 270.0
 margin_top = 20.0
-margin_right = 0.0
-margin_bottom = 0.0
-alignment = 0
 mouse_filter = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="SkillName" type="Label" parent="RightVBox"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 0
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 754.0
 margin_bottom = 21.0
-custom_fonts/font = ExtResource( 2 )
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 mouse_filter = 1
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 2 )
 
 [node name="Description" type="Label" parent="RightVBox"]
-
-rect_min_size = Vector2( 0, 100 )
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 0
-margin_left = 0.0
 margin_top = 25.0
 margin_right = 754.0
 margin_bottom = 125.0
-autowrap = true
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+rect_min_size = Vector2( 0, 100 )
 mouse_filter = 1
+size_flags_vertical = 0
+autowrap = true
 
 [node name="Type" type="RichTextLabel" parent="RightVBox"]
-
-rect_min_size = Vector2( 0, 20 )
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 1
-margin_left = 0.0
 margin_top = 129.0
 margin_right = 754.0
 margin_bottom = 149.0
+rect_min_size = Vector2( 0, 20 )
 bbcode_enabled = true
-bbcode_text = ""
-visible_characters = -1
-mouse_filter = 0
 
 [node name="BaseDamage" type="Label" parent="RightVBox"]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 0
-margin_left = 0.0
 margin_top = 153.0
 margin_right = 754.0
 margin_bottom = 167.0
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 mouse_filter = 1
+size_flags_vertical = 0
 
 [node name="Label" type="Label" parent="."]
-
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags_horizontal = 1
-size_flags_vertical = 0
-margin_left = 0.0
-margin_top = 0.0
 margin_right = 247.0
 margin_bottom = 14.0
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 mouse_filter = 1
-
-[connection signal="item_selected" from="LeftVBox/ScrollContainer/SpellList" to="." method="_on_SpellList_item_selected" binds=[  ]]
+size_flags_vertical = 0
+[connection signal="item_selected" from="LeftVBox/ScrollContainer/SpellList" to="." method="_on_SpellList_item_selected"]
