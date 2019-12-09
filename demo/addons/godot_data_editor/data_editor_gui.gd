@@ -130,7 +130,7 @@ func open_item():
 	elif os_name == "OSX":
 		program = "open"								
 	else:
-		program = "nautilus"
+		program = "dolphin"
 	OS.execute(program, [item_path], false)
 
 func change_item_context(selected_item, selected_class):	

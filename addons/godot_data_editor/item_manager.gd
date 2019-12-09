@@ -332,7 +332,7 @@ func delete_item(item):
 	var directory = Directory.new()
 	# TODO: Check why items[item._class].erase(item) doesn't work
 	var items_of_class = items[item._class]			
-	var status = directory.remove_and_collide(path)
+	var status = directory.remove(path)
 	load_manager()
 
 # Gets all items of a specific class
