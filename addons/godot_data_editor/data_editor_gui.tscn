@@ -380,9 +380,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 margin_left = 8.0
-margin_top = -65.75
+margin_top = -65.0
 margin_right = -8.0
-margin_bottom = 51.75
+margin_bottom = 51.0
 focus_neighbour_bottom = NodePath("../ClassIconPath")
 placeholder_text = "Name"
 
@@ -391,9 +391,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 margin_left = 8.0
-margin_top = -65.75
+margin_top = -65.0
 margin_right = -8.0
-margin_bottom = 51.75
+margin_bottom = 51.0
 focus_neighbour_top = NodePath("../ClassName")
 focus_neighbour_right = NodePath("../NewClassIconSearchButton")
 placeholder_text = "Icon Path (optional)"
@@ -402,7 +402,7 @@ placeholder_text = "Icon Path (optional)"
 margin_left = 8.0
 margin_top = 22.0
 margin_right = 511.0
-margin_bottom = 153.5
+margin_bottom = 152.0
 popup_exclusive = true
 window_title = "Apri un file"
 dialog_hide_on_ok = true
@@ -418,15 +418,15 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 margin_left = -511.0
-margin_top = -65.75
+margin_top = -65.0
 margin_right = -8.0
-margin_bottom = 51.75
+margin_bottom = 51.0
 focus_neighbour_left = NodePath("../ClassIconPath")
 text = "Search"
 
 [node name="OptionsDialog" parent="." instance=ExtResource( 20 )]
 margin_right = 550.0
-margin_bottom = 310.0
+margin_bottom = 340.0
 
 [node name="InputDialog" parent="." instance=ExtResource( 21 )]
 

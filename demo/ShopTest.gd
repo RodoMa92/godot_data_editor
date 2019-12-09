@@ -9,7 +9,6 @@ func _ready():
 	for shop_type in shop_types:
 		buttons_array.add_button(shop_type)
 
-
 func _on_ShopButtons_button_selected( button_idx ):
 	var text = buttons_array.get_button_text(button_idx)
 	var all_merchants = data.get_items("merchant")

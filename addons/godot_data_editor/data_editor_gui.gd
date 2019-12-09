@@ -18,7 +18,6 @@ onready var no_classes = $"VBox/Body/Content/VBox/NoClasses"
 #onready var last_modified_date = $"VBox/Body/Content/VBox/Container/GridContainer/LastModifiedDate"
 #onready var created_date = $"VBox/Body/Content/VBox/Container/GridContainer/CreatedDate"
 
-
 onready var new_custom_property_dialog = $"NewCustomPropertyDialog"
 onready var new_custom_property_name = $"NewCustomPropertyDialog/LineEdit"
 onready var new_custom_property_type_options = $"NewCustomPropertyDialog/TypeOptions"
@@ -43,7 +42,6 @@ onready var new_item_class_name = $"NewClassDialog/ClassName"
 onready var new_item_class_icon = $"NewClassDialog/ClassIconPath"
 onready var new_item_class_icon_dialog = $"NewClassDialog/ClassIconFileDialog"
 
-
 onready var warn_dialog = $"WarnDialog"
 onready var options_screen = $"OptionsDialog"
 
@@ -60,7 +58,6 @@ func _init():
 
 func _ready():	
 	ProjectSettings.set("debug_is_editor", false)
-	
 	# Tree signals
 	item_tree.connect("on_new_item_pressed", self, "handle_actions", ["add"])
 	item_tree.connect("on_rename_pressed", self, "handle_actions", ["rename"])
@@ -76,13 +73,13 @@ func _ready():
 
 	options_screen.connect("extension_changed", item_manager, "rename_extension_of_all_items", [])
 	options_screen.connect("encryption_changed", item_manager, "delete_and_resave", [])
+	options_screen.connect("file_editor_changed", self, "_on_update_fm")
 
 	item_manager.connect("class_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_insertion_failed", self, "show_warning", [])
 	item_manager.connect("custom_property_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_duplication_failed", self, "show_warning", [])
-#	item_manager.connect("class_is_invalid", self, "show_warning", [])	
-
+#	item_manager.connect("class_is_invalid", self, "show_warning", [])
 	# Add types to the custom property type dropdown
 	var type_names = item_manager.type_names.keys()
 	type_names.sort()
@@ -92,7 +89,6 @@ func _ready():
 		new_custom_property_type_options.add_item(type)
 		new_custom_property_type_options.set_item_metadata(index, item_manager.type_names[type])
 		index += 1
-
 	# No classes available
 	var has_no_classes = item_manager.classes.size() == 0
 	if has_no_classes:
@@ -118,26 +114,22 @@ func _ready():
 		selected_class = all_classes[0]
 		change_item_context(selected_item, selected_class)
 
-# TODO: Implement
 func open_item():
 	var item_path = item_manager.get_full_path(selected_item)
-	var program = ""
+	var program = item_manager.config_file_manager
 	var os_name = OS.get_name()
-	if os_name == "Windows":
+	if os_name == "Windows" and program == "":
 		program = "explorer"
 		item_path = item_path.replace("/", "\\")		# ~_~... 
-	# TODO: Not sure if these work... Probably add the possibility to add a custom editor
-	elif os_name == "OSX":
-		program = "open"								
-	else:
-		program = "dolphin"
+	elif os_name == "OSX" and program == "":
+		program = "open"
+	elif os_name == "X11" and program == "":
+		program = "nautilus"
 	OS.execute(program, [item_path], false)
 
 func change_item_context(selected_item, selected_class):	
-	
 	if selected_class:
 		self.selected_class = selected_class
-			
 	# TODO: Move to method, clean up
 	var has_no_classes = item_manager.classes.size() == 0
 	if has_no_classes:
@@ -222,18 +214,15 @@ func warn_about_reload():
 	if item_manager.has_unsaved_items():
 		input_dialog.input_dialog_popup(self, "reload_confirmed", tr("Confirm reload"), tr("Some changes have not been saved. \nThey will be discarded if you proceed. Are you sure you want to perform this action?"))	
 
-
 func reload():
 	item_manager.load_manager()
 	item_tree.load_tree(true)
 	if item_manager.get_item(selected_class, selected_id):
 		item_tree.select_item(item_manager.get_item(selected_class, selected_id))
-		
 
 func toggle_item_dirty_state(item):
 	item._dirty = true
 	item_tree.set_tree_item_label_text(item)
-
 
 # Validation takes place in the item manager
 func _on_NewCustomPropertyDialog_confirmed():
@@ -245,14 +234,12 @@ func _on_NewCustomPropertyDialog_confirmed():
 		toggle_item_dirty_state(selected_item)
 		custom_properties.build_properties(selected_item)
 
-
 # TODO: Show confirmation dialog
 func delete_custom_property(property_name):
 	item_manager.delete_custom_property(selected_item, property_name)
 	toggle_item_dirty_state(selected_item)
 	custom_properties.build_properties(selected_item)
 
-	
 # TODO: New Class Dialog is still a mess
 func _on_AddClassButton_button_down():
 	new_item_class_name.set_text("")
@@ -260,7 +247,6 @@ func _on_AddClassButton_button_down():
 	new_item_class_icon_dialog.set_current_path("")	
 	new_item_class_dialog.popup_centered()
 	new_item_class_name.grab_focus()
-
 
 func _on_NewClassDialog_confirmed():
 	var name = new_item_class_name.get_text().to_lower()
@@ -270,7 +256,6 @@ func _on_NewClassDialog_confirmed():
 	item_tree.select_class(name)
 	reload()
 	edit_class()
-
 
 # New Class Dialog
 func _on_NewClassIconSearchButton_button_down():
@@ -317,7 +302,7 @@ func handle_actions(action, argument = ""):
 	elif action == "options":
 		options_screen.popup_centered()
 	elif action == "edit_class":
-		edit_class()		
+		edit_class()
 	elif action == "copy_id":
 		copy_id()
 	elif action == "copy_get_item":
@@ -328,53 +313,58 @@ func handle_actions(action, argument = ""):
 		new_custom_property_name.set_text("")
 		new_custom_property_dialog.popup_centered()
 		new_custom_property_name.grab_focus()
-		
+
 #########################################################################
-# Handlers										#
+# Handlers																#
 #########################################################################
 
 func _on_add_item_confirmed(id, display_name):
 	var new_item = item_manager.create_and_add_new_item(selected_class, id, display_name)
 	if new_item:
 		item_tree.add_leaf(new_item, true)
-		
-	
+
 func _on_rename_item_confirmed(id):
 	item_manager.rename_item(selected_item, id)
 	reload()
-	
-	
+
 func _on_rename_class_confirmed(name):
 	item_manager.rename_class(selected_class, name)
 	reload()
-	
 
 func _on_duplicate_confirmed(id, display_name):
 	var duplicated_item = item_manager.duplicate_item(selected_item, id, display_name, false)
 	item_tree.add_leaf(duplicated_item, true)
 	reload()
-		
+
 func _on_delete_item_confirmed():
 	item_manager.delete_item(selected_item)
 	reload()
-	
-	
+
 func _on_delete_class_confirmed():
 	item_manager.delete_class(selected_class)
 	if item_manager.classes.size() > 0:
 		item_tree.select_class(item_manager.class_names[0])
 	else:
 		change_item_context(null, null)
-	reload()	
-	
+	reload()
+
+"""
+It seems that the variables aren't refreshed until a reload, this function simply
+reload the global variable in order to refresh the file manager name variable.
+"""
+
+func _on_update_fm():
+	item_manager = load("res://addons/godot_data_editor/item_manager.gd").new()
+
 #########################################################################
 # Buttons on the right													#
 #########################################################################
+
 func change_display_name(new_name):
 	selected_item._display_name = new_name
 	toggle_item_dirty_state(selected_item)
 	change_item_context(selected_item, selected_class)
-		
+
 func copy_id():
 	if selected_item:
 		OS.set_clipboard(selected_id)
@@ -385,8 +375,7 @@ func copy_get_item():
 	if selected_item:
 		var copy_string = "data.get_item(\"" + selected_class + "\", \"" + selected_id + "\")"
 		OS.set_clipboard(copy_string)
-		
-						
+
 func edit_class():
 	var script = item_manager.classes[selected_class]
 	emit_signal("class_edit_requested", script)
@@ -394,12 +383,11 @@ func edit_class():
 #####################################################
 # OTHERS
 #####################################################
-	
+
 func show_warning(title, text):
 	warn_dialog.set_title(title)
 	warn_dialog.set_text(text)
 	warn_dialog.popup_centered()
-
 
 func log_text(text):
 	var file = File.new()
@@ -407,6 +395,3 @@ func log_text(text):
 	var old_text = file.get_as_text()
 	var date = str(OS.get_datetime()["hour"]) + ":" + str(OS.get_datetime()["minute"]) + ":" + str(OS.get_datetime()["second"]) + "\t"
 	file.store_line(old_text + date + text)
-
-
-

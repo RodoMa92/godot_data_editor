@@ -10,14 +10,11 @@ var item = null
 
 signal on_item_changed(item)
 
-
 func build_properties(item):
 	self.item = item
 	for node in class_properties_box.get_children():
 		if node.has_meta("property"):
 			class_properties_box.remove_child(node)
-
-
 	var number_of_properties = 0
 	for property in item.get_property_list():
 		if property["usage"] == (PROPERTY_USAGE_SCRIPT_VARIABLE + PROPERTY_USAGE_STORAGE + PROPERTY_USAGE_EDITOR + PROPERTY_USAGE_NETWORK):
@@ -34,8 +31,7 @@ func build_properties(item):
 			class_properties_box.add_child(property_item)
 	pass
 	if number_of_properties == 0:
-		no_class_properties_label.show()	
-		
+		no_class_properties_label.show()
 
 func item_changed(property, value):
 	if item:

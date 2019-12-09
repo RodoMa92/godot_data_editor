@@ -11,7 +11,6 @@ var callback_method = ""
 onready var line_edit_1 = $"VBox/LineEdit1"
 onready var line_edit_2 = $"VBox/LineEdit2"
 
-
 #func _init(text, placerholder_1 = "", placeholder_2 = ""):
 
 func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = "", default_text_1 = "", placeholder_2 = "", default_text_2 = ""):
@@ -19,7 +18,6 @@ func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = ""
 	self.callback_method = callback_method
 	self.placeholder_1 = placeholder_1
 	self.placeholder_2 = placeholder_2
-	
 	if not caller.is_connected("input_dialog_confirmed", caller, callback_method):
 		caller.connect("input_dialog_confirmed", caller, callback_method, [])
 	set_text(text)
@@ -29,7 +27,6 @@ func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = ""
 	else:
 		line_edit_1.show()
 		line_edit_1.set_placeholder(placeholder_1)
-
 	if placeholder_2 == "":
 		line_edit_2.hide()
 	else:
@@ -38,7 +35,6 @@ func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = ""
 	line_edit_1.set_text(default_text_1)
 	line_edit_2.set_text(default_text_2)
 	self.popup_centered()
-	
 	if line_edit_1.visible:
 		line_edit_1.grab_focus()
 
@@ -50,7 +46,5 @@ func _on_ConfirmationDialog_confirmed():
 	elif placeholder_1:
 		caller.emit_signal("input_dialog_confirmed", text1)
 	else:
-		caller.emit_signal("input_dialog_confirmed")		
-		
-		
+		caller.emit_signal("input_dialog_confirmed")
 	caller.disconnect("input_dialog_confirmed", caller, callback_method)

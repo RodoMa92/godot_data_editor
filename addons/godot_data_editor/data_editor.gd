@@ -8,7 +8,7 @@ var gui = null
 var all_items = {}
 
 signal data_item_class_opened(item_class)
-	
+
 func _enter_tree():	
 	OS.set_low_processor_usage_mode(true)
 	name = "Data Editor"
@@ -30,18 +30,13 @@ func _enter_tree():
 	
 	gui.hide()
 
-
 # Remove control and data singleton
 func _exit_tree():
 	OS.set_low_processor_usage_mode(false)
-
 	remove_control_from_bottom_panel(gui)
-
 	#get_editor_interface().get_editor_viewport().remove_child(gui)
-	
 	if gui:
 		gui.free()
-		
 	var config = ConfigFile.new()
 	#var status = config.load("res://engine.cfg")
 	#if status == OK:
@@ -52,9 +47,7 @@ func _exit_tree():
 		# Check if the Classes and Data folders exist
 	ProjectSettings.clear("item_manager")
 	ProjectSettings.save()
-	
-	
-	
+
 func _ready():
 	gui.connect("class_edit_requested", self, "edit_class", [])
 	ProjectSettings.set("debug_is_editor", true)
@@ -62,8 +55,7 @@ func _ready():
 # Opens the selected class in the Script Editor
 func edit_class(item_class):
 	get_editor_interface().edit_resource(item_class)
-	
-	
+
 # TODO: Maybe there is a way  to refresh the tree without restart?
 func check_for_data_singleton():
 	pass
@@ -72,7 +64,7 @@ func check_for_data_singleton():
 	#if status == OK and not config.has_section_key("autoload", "data"):
 	#	config.set_value("autoload", "data", "*res://addons/godot_data_editor/data.gd")
 	#	config.save("res://engine.cfg") 
-	
+
 # Load the plugin settings and adds default if they do not exist.
 # TODO: Obtain defaults from dialog
 func check_plugin_settings():
@@ -94,7 +86,6 @@ func check_plugin_settings():
 		if not config.has_section_key("custom", "serializer"):
 			config.set_value("custom", "serializer", "json")
 	config.save("res://addons/godot_data_editor/plugin.cfg")
-			
 
 # Virtual: Name of the tool button on top
 func get_name():
@@ -113,6 +104,3 @@ func make_visible(visible):
 		
 	elif gui:
 		gui.hide()
-		 
-
-

@@ -16,8 +16,5 @@ func create_shop(merchant):
 		item_list.add_item(shop_item.name)
 		item_list.set_item_metadata(i, shop_item)
 		i = i + 1
-		
 	get_node("VBoxContainer/MerchantLabel").set_bbcode(merchant.name)
 	get_node("VBoxContainer/GreetingLabel").set_text(merchant.greeting)
-		
-	

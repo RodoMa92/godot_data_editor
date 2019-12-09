@@ -17,7 +17,6 @@ func _ready():
 		spell_list.set_item_tooltip(i, spell.name)
 		spell_list.set_item_metadata(i, spell)
 		i = i + 1
-	
 	spell_list.select(0)
 	_on_SpellList_item_selected(0)
 

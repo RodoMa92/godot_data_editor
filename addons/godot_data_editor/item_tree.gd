@@ -67,14 +67,12 @@ func load_tree(is_reload = false):
 		var root = create_item_root(item_class)
 		tree_elements["_roots"][item_class] = root
 	pass
-	
 	# Populate the list with items
 	classes.sort()
 	for item_class in classes:
 		tree_elements[item_class] = {}
 		if item_manager.invalid_classes.has(item_class):
 			continue
-		
 		var ids = item_manager.items[item_class].keys()
 		ids.sort()
 		for id in ids:
@@ -83,7 +81,6 @@ func load_tree(is_reload = false):
 				var tree_item = add_leaf(item, false)
 		pass
 	pass
-	
 	if last_selected_id:
 		tree_element_to_be_selected = get_tree_item(last_selected_class, last_selected_id)
 	elif last_selected_class:
@@ -92,8 +89,6 @@ func load_tree(is_reload = false):
 		tree_element_to_be_selected = tree.get_root().get_children()
 	else:
 		tree_element_to_be_selected = null			# No elements to be selected
-		
-		
 	# Handle filter
 	if tree_element_to_be_selected and not filter_control.has_focus():
 		tree.grab_focus()
@@ -146,21 +141,20 @@ func add_leaf(item, update_order):
 		to_be_reordered.invert()
 		for element_name in to_be_reordered:
 			tree_elements[item_class][element_name].move_to_top()
- 		pass
+		pass
 		tree_item.select(0)
 	return tree_item
 
 func set_tree_item_label_text(item, tree_item = null):
 	if tree_item == null:
 		tree_item = get_tree_item(item._class, item._id)
-		
 	if item._dirty or not item._persistent:
 		tree_item.set_text(0, " " + item._display_name + " (*)")
 		tree_item.set_custom_color(0, Color(1, 0.5, 0.5))
 	else:
 		tree_item.set_text(0, " " + item._display_name)
 		tree_item.set_custom_color(0, Color(0.7, 0.7, 0.7))
-		
+
 func get_selected_item_root():
 	var selected = tree.get_selected()
 	if selected.has_meta("item"):
@@ -214,7 +208,6 @@ func save_collapsed_state():
 	for item_class in tree_roots:
 		if tree_roots[item_class].is_collapsed():
 			collapsed_item_classes.append(item_class)
-		
 
 # Expands the tree items which were not collapsed before
 func restore_collapsed_state():
@@ -232,12 +225,12 @@ func _on_InstanceContextMenu_item_pressed(index):
 	elif index == 1:
 		emit_signal("on_rename_pressed")
 	elif index == 2:
-		emit_signal("on_delete_pressed")		
+		emit_signal("on_delete_pressed")
 	elif index == 3:
 		emit_signal("on_duplicate_pressed")
 	elif index == 4:
-		emit_signal("on_open")	
-		
+		emit_signal("on_open")
+
 ###########################################################
 # CLASS CONTEXT MENU                                      #
 ###########################################################

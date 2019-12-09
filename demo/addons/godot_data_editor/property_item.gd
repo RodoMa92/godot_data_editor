@@ -40,7 +40,7 @@ func initialize(property_name, type, value = null,  hint = 0, hint_text = "", ha
 	self.hint_text = hint_text
 	self.has_delete_button = has_delete
 
-func _ready():	
+func _ready():
 	# Label describing property
 	var property_label = Label.new()
 	property_label.set_text(property_name.capitalize())
@@ -82,13 +82,11 @@ func _ready():
 		create_object_or_image()
 	else:
 		control = get_not_yet_supported()
-	
 	control.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 	control.set_margin(MARGIN_LEFT, 200)
 	control.set_custom_minimum_size(Vector2(get_parent().get_parent().get_parent().get_size().x - 270, 0))
 	add_child(property_label)
 	add_child(control)
-	
 	if has_delete_button:
 		var delete_button = ToolButton.new()
 		delete_button.set_button_icon(preload("res://addons/godot_data_editor/icons/icon_remove.png"))
@@ -113,7 +111,6 @@ func open_custom_editor():
 	menu.get_children()[1].grab_focus()
 	menu.popup()
 
-
 ##################################################
 # All types
 ##################################################
@@ -128,7 +125,6 @@ func create_bool():
 func create_number():
 	if value == null:
 		value = 0
-
 	if hint == PROPERTY_HINT_ENUM:
 		control = MenuButton.new()
 		for i in range(0, hint_array.size()):
@@ -136,10 +132,8 @@ func create_number():
 		control.set_flat(false)
 		control.set_text(control.get_popup().get_item_text(value))
 		control.get_popup().connect("id_pressed", self, "int_enum_property_value_changed", [])
-
 	elif hint == PROPERTY_HINT_EXP_EASING:
 		control = get_not_yet_supported()
-
 	elif hint == PROPERTY_HINT_FLAGS:
 		control = get_not_yet_supported()
 	# Range or no hints at all
@@ -147,7 +141,6 @@ func create_number():
 		var control_max
 		var control_min
 		var control_step
-	
 		if type == TYPE_INT:
 			control_min = -2147483647
 			control_max = 2147483647
@@ -156,22 +149,18 @@ func create_number():
 			control_min = -16777216
 			control_max = 16777216
 			control_step = 0.00001
-			
 		# Set minimum, if defined
 		if number_of_hints >= 1:
 			if not hint_array[0].empty():
 				control_min = int(hint_array[0])
-					
 		# Set maximum, if defined
 		if number_of_hints >= 2:
 			if not hint_array[1].empty():
 				control_max = int(hint_array[1])
-		
 		# Set control step, if defined
 		if number_of_hints >= 3:
 			if not hint_array[2].empty():
 				control_step = float(hint_array[2])
-
 		control = SpinBox.new()
 		control.set_min(control_min)
 		control.set_max(control_max)
@@ -198,7 +187,6 @@ func create_string():
 		line_edit.set_text(str(value))
 		control.add_child(line_edit)
 		control.add_child(more_button)
-
 		popup = Popup.new()
 		popup.set_size(Vector2(600, 400))
 		var text_edit = TextEdit.new()
@@ -209,7 +197,6 @@ func create_string():
 		add_child(popup)
 		popup.add_child(text_edit)
 		text_edit.set_text(str(value))
-
 		line_edit.connect("text_changed", self, "property_value_changed", [])
 		more_button.connect("button_down", popup, "popup_centered_minsize", [Vector2(800, 600)])
 		popup.connect("popup_hide", self, "text_edit_popup_closed", [])
@@ -232,7 +219,6 @@ func create_node_path():
 	control.set_text(value)
 	control.connect("text_changed", self, "property_value_changed", [])
 
-
 # Adapted Port of property editor 
 func create_custom_editor(amount, columns, label_w, strings, read_only = false):
 	self.value_editor = []
@@ -251,7 +237,6 @@ func create_custom_editor(amount, columns, label_w, strings, read_only = false):
 		value_label.append(Label.new())
 		menu.add_child(value_label[i])	
 	pass
-	
 	var rows=((amount-1)/columns)+1
 	menu.set_size(Vector2( m*(1+columns)+(w+label_w)*columns, m*(1+rows)+h*rows ) );
 	for i in range(0, amount):
@@ -290,7 +275,6 @@ func custom_editor_value_applied():
 		value = Quat(va[0], va[1], va[2], va[3])
 	if type == TYPE_TRANSFORM:
 		value = Transform(Vector3(va[0], va[1], va[2]), Vector3(va[4], va[5], va[6]), Vector3(va[8], va[9], va[10]), Vector3(va[3], va[7], va[11]))
-	
 	if value != self.value:
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)
@@ -332,7 +316,7 @@ func get_custom_editor_value(index):
 		elif index == 9: return value.basis.z.y
 		elif index == 10: return value.basis.z.z
 		else: return value.origin.z
-	
+
 func create_object_or_image():
 	value = str(value)
 	control = HBoxContainer.new()
@@ -346,7 +330,7 @@ func create_object_or_image():
 			var texture = load(value)
 			var texture_frame = TextureRect.new()
 			texture_frame.set_expand(true)
-			texture_frame.set_custom_minimum_size(Vector2(32, 32))
+			texture_frame.set_custom_minimum_size(Vector2(26, 26))
 			texture_frame.set_texture(texture)
 #			var texture_popup = Popup.new()
 #			var texture_frame_full = TextureRect.new()
@@ -358,21 +342,17 @@ func create_object_or_image():
 			control.add_child(texture_frame)
 #			control.add_child(texture_popup)
 	control.add_child(object_type_line_edit)
-
 	var load_button = ToolButton.new()
 	load_button.set_button_icon(load_icon)
 	control.add_child(load_button)
-	
 	if Engine.editor_hint:
 		dialog = EditorFileDialog.new()
 		dialog.set_access(EditorFileDialog.ACCESS_RESOURCES)
 		dialog.set_mode(EditorFileDialog.MODE_OPEN_FILE)
 		load_button.connect("button_down", dialog, "popup_centered_ratio")
-
 		var filter = ""
 		var resource_type = ""
 		var extension_array = [] 
-		
 		if hint == PROPERTY_HINT_RESOURCE_TYPE:
 			resource_type = hint_text
 			extension_array = ResourceLoader.get_recognized_extensions_for_type(resource_type)
@@ -390,10 +370,7 @@ func create_object_or_image():
 		pass 
 		dialog.connect("file_selected", self, "fill_resource_name", [])
 		add_child(dialog)
-	
 	#.add_icon_item(get_icon("Load","EditorIcons"), "Load")
-
-
 
 func get_not_yet_supported():
 	var control = Label.new()
@@ -420,7 +397,6 @@ func property_value_changed(value):
 		value = float(value)
 	elif type == TYPE_COLOR:
 		value = Color(value)
-	
 	if self.value != value:
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)	

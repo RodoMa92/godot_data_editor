@@ -17,6 +17,8 @@ onready var class_directory_label = $"Panel/GridContainer/OutputDirectoryLabel"
 onready var class_directory_line_edit = $"Panel/GridContainer/ClassDirectoryHBox/ClassDirectoryLineEdit"
 onready var sanitize_ids_label = $"Panel/GridContainer/SanitizeIdsLabel"
 onready var sanitize_ids_check_box = $"Panel/GridContainer/SanitizeIdsCheckBox"
+onready var file_manager_label = $"Panel/GridContainer/FileManagerLabel"
+onready var file_manager_edit = $"Panel/GridContainer/FileManagerEdit"
 
 onready var warn_dialog = $"WarnDialog"
 
@@ -26,10 +28,12 @@ var encrypt = false
 var password = ""
 var class_directory = ""
 var output_directory = ""
+var file_manager = ""
 var sanitize_ids = true
 
 signal extension_changed(new_extension, serializer)
 signal encryption_changed(is_encrypted, password)
+signal file_editor_changed
 
 func _ready():
 	self.set_title(tr("Options"))
@@ -40,19 +44,16 @@ func _ready():
 	class_directory_label.set_text(tr("Class Directory"))
 	output_directory_label.set_text(tr("Output Directory"))
 	sanitize_ids_label.set_text(tr("Sanitize IDs"))
-	
 	config = ConfigFile.new()
-	config.load("res://addons/godot_data_editor/plugin.cfg") 
+	config.load("res://addons/godot_data_editor/plugin.cfg")
 	serializer = config.get_value("custom", "serializer")
 	extension = config.get_value("custom", "extension")
-
 	class_directory = config.get_value("custom", "class_directory")
 	sanitize_ids = config.get_value("custom", "sanitize_ids")
 	encrypt = config.get_value("custom", "encrypt")
 	password = config.get_value("custom", "password")
 	output_directory = config.get_value("custom", "output_directory")
-	sanitize_ids = config.get_value("custom", "sanitize_ids")
-	
+	file_manager = config.get_value("custom", "file_manager")
 	serializer_option.clear()
 	serializer_option.add_item("json", 0)
 	serializer_option.add_item("binary", 1)
@@ -63,9 +64,7 @@ func _ready():
 	else:
 		serializer_option.select(0)
 		serializer = "json"
-		
 	extension_line_edit.set_text(extension)
-	
 	if serializer == "binary":
 		encrypt_check_box.set_disabled(false)
 		password_line_edit.set_editable(true)
@@ -74,18 +73,15 @@ func _ready():
 		password = ""
 		encrypt_check_box.set_disabled(true)
 		password_line_edit.set_editable(false)
-	
 	encrypt_check_box.set_pressed(encrypt)
 	encrypt_check_box.set_text(str(encrypt))
-	
 	password_line_edit.set_text(str(password))
-	
 	class_directory_line_edit.set_text(str(class_directory))
 	output_directory_line_edit.set_text(str(output_directory))
-	
 	sanitize_ids_check_box.set_pressed(sanitize_ids)
 	sanitize_ids_check_box.set_text(str(sanitize_ids))
-	
+	file_manager_edit.set_text(str(file_manager))
+
 func _on_SerializerOption_item_selected(index):
 	if index == 0:
 		extension_line_edit.set_text("json")
@@ -113,33 +109,36 @@ func _on_Options_confirmed():
 		error_message = tr("The class directory must be a resource path, e.g. 'res://classes'.")
 	if self.output_directory == "" or not self.output_directory.begins_with("res://"):
 		error_message = tr("The output directory must be a resource path, e.g. 'res://data'.")
-	
 	var extension_changed = false
 	var encryption_changed = false
+	var file_manager_changed = false
 	if extension != config.get_value("custom", "extension") or serializer != config.get_value("custom", "serializer"):
 		extension_changed = true
 	if encrypt != config.get_value("custom", "encrypt") or password != config.get_value("custom", "password"):
 		encryption_changed = true
-
+	if file_manager != config.get_value("custom", "file_manager"):
+		file_manager_changed = true
 	if error_message == "":
 		config.set_value("custom", "extension", extension)
 		config.set_value("custom", "serializer", serializer)
 		config.set_value("custom", "encrypt", encrypt)
 		config.set_value("custom", "password", password)
-		config.set_value("custom", "class_directory", class_directory)		
-		config.set_value("custom", "output_directory", output_directory)		
-		config.set_value("custom", "sanitize_ids", sanitize_ids)	
+		config.set_value("custom", "class_directory", class_directory)
+		config.set_value("custom", "output_directory", output_directory)
+		config.set_value("custom", "sanitize_ids", sanitize_ids)
+		config.set_value("custom", "file_manager", file_manager)
 		config.save("res://addons/godot_data_editor/plugin.cfg")
+		extract_values()
 		hide()
 	else:
 		warn_dialog.set_text(error_message)
 		warn_dialog.popup_centered()
-	
 	if extension_changed:
 		emit_signal("extension_changed", extension, serializer)
-
 	if encryption_changed:
 		emit_signal("encryption_changed", encrypt, password)
+	if file_manager_changed:
+		emit_signal("file_editor_changed")
 # TODO: Add a tip to NOT FORGET THE PASSWORD
 
 func extract_values():
@@ -149,6 +148,7 @@ func extract_values():
 	password = password_line_edit.get_text()
 	output_directory = output_directory_line_edit.get_text()
 	sanitize_ids = sanitize_ids_check_box.is_pressed()
+	file_manager = file_manager_edit.get_text()
 
 func _on_ClassDirectoryButton_button_down():
 	var dialog = EditorFileDialog.new()
