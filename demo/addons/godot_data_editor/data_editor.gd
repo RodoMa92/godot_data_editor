@@ -45,12 +45,12 @@ func _exit_tree():
 	#		config.save("res://engine.cfg")
 			
 		# Check if the Classes and Data folders exist
-	ProjectSettings.clear("godot_data_editor/item_manager")
-	ProjectSettings.save()
+	#ProjectSettings.clear("godot_data_editor/item_manager")
+	#ProjectSettings.save()
 
 func _ready():
 	gui.connect("class_edit_requested", self, "edit_class", [])
-	ProjectSettings.set("debug_is_editor", true)
+	#ProjectSettings.set("debug_is_editor", true)
 
 # Opens the selected class in the Script Editor
 func edit_class(item_class):

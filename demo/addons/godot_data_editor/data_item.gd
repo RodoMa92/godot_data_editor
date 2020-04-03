@@ -39,7 +39,7 @@ func set_display_name(name):
 	_display_name = name
 
 func update_property(property, value):
-	var data_singleton = ProjectSettings.get_singleton("data")
+	var data_singleton = data
 	if data_singleton:
 		data_singleton.set_progress(_class, _id, property, value)
 
