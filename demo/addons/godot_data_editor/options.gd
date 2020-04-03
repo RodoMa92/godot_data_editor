@@ -19,6 +19,9 @@ onready var sanitize_ids_label = $"Panel/GridContainer/SanitizeIdsLabel"
 onready var sanitize_ids_check_box = $"Panel/GridContainer/SanitizeIdsCheckBox"
 onready var file_manager_label = $"Panel/GridContainer/FileManagerLabel"
 onready var file_manager_edit = $"Panel/GridContainer/FileManagerEdit"
+onready var max_prev_size_label = $"Panel/GridContainer/MaxPrevSizeLabel"
+onready var prev_size_x_edit = $"Panel/GridContainer/SizeVBox/x"
+onready var prev_size_y_edit = $"Panel/GridContainer/SizeVBox/y"
 
 onready var warn_dialog = $"WarnDialog"
 
@@ -29,11 +32,14 @@ var password = ""
 var class_directory = ""
 var output_directory = ""
 var file_manager = ""
+var prev_size_x = ""
+var prev_size_y = ""
 var sanitize_ids = true
 
 signal extension_changed(new_extension, serializer)
 signal encryption_changed(is_encrypted, password)
 signal file_editor_changed
+signal preview_size_changed(size_x, size_y)
 
 func _ready():
 	self.set_title(tr("Options"))
@@ -54,6 +60,8 @@ func _ready():
 	password = config.get_value("custom", "password")
 	output_directory = config.get_value("custom", "output_directory")
 	file_manager = config.get_value("custom", "file_manager")
+	prev_size_x = config.get_value("custom", "prev_size_x", "64")
+	prev_size_y = config.get_value("custom", "prev_size_y", "64")
 	serializer_option.clear()
 	serializer_option.add_item("json", 0)
 	serializer_option.add_item("binary", 1)
@@ -81,6 +89,8 @@ func _ready():
 	sanitize_ids_check_box.set_pressed(sanitize_ids)
 	sanitize_ids_check_box.set_text(str(sanitize_ids))
 	file_manager_edit.set_text(str(file_manager))
+	prev_size_x_edit.set_text(str(prev_size_x))
+	prev_size_y_edit.set_text(str(prev_size_y))
 
 func _on_SerializerOption_item_selected(index):
 	if index == 0:
@@ -118,6 +128,12 @@ func _on_Options_confirmed():
 		encryption_changed = true
 	if file_manager != config.get_value("custom", "file_manager"):
 		file_manager_changed = true
+	if int(self.prev_size_x_edit.get_text()) < 0 or int(self.prev_size_y_edit.get_text()) < 0:
+		error_message = tr("Please insert a positive integer as preview sizes for the popup preview.")
+	var cur_val_x = int(self.prev_size_x_edit.get_text())
+	var cur_val_y = int(self.prev_size_y_edit.get_text())
+	if int(config.get_value("custom", "prev_size_x")) != cur_val_x or int(config.get_value("custom", "prev_size_y")) != cur_val_y:
+		emit_signal("preview_size_changed", int(self.prev_size_x_edit.get_text()), int(self.prev_size_y_edit.get_text()))
 	if error_message == "":
 		config.set_value("custom", "extension", extension)
 		config.set_value("custom", "serializer", serializer)
@@ -127,6 +143,12 @@ func _on_Options_confirmed():
 		config.set_value("custom", "output_directory", output_directory)
 		config.set_value("custom", "sanitize_ids", sanitize_ids)
 		config.set_value("custom", "file_manager", file_manager)
+		config.set_value("custom", "prev_size_x", String(int(prev_size_x)))
+		config.set_value("custom", "prev_size_y", String(int(prev_size_y)))
+		# Reupdating the text fields, otherwise they will still show the decimal, 
+		# even if it was removed
+		prev_size_x_edit.set_text(String(int(prev_size_x)))
+		prev_size_y_edit.set_text(String(int(prev_size_y)))
 		config.save("res://addons/godot_data_editor/plugin.cfg")
 		extract_values()
 		hide()
@@ -149,6 +171,8 @@ func extract_values():
 	output_directory = output_directory_line_edit.get_text()
 	sanitize_ids = sanitize_ids_check_box.is_pressed()
 	file_manager = file_manager_edit.get_text()
+	prev_size_x = prev_size_x_edit.get_text()
+	prev_size_y = prev_size_y_edit.get_text()
 
 func _on_ClassDirectoryButton_button_down():
 	var dialog = EditorFileDialog.new()

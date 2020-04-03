@@ -5,6 +5,7 @@ extends Panel
 
 var load_icon = preload("icons/icon_load.png")
 var multi_line_icon = preload("icons/icon_multi_line.png")
+var options = null
 
 var property_name = ""
 var type = TYPE_NIL
@@ -26,19 +27,23 @@ var value_editor = []
 var dialog = null
 var object_type_line_edit = null
 
+var config_prev_size_x = 0
+var config_prev_size_y = 0
 
 signal on_property_value_changed(property, value)
 signal property_item_load_button_down(property_item)
 signal custom_property_delete_requested(property_name)
 
 # has_delete is used for custom properties
-func initialize(property_name, type, value = null,  hint = 0, hint_text = "", has_delete = false):
+func initialize(property_name, type, value = null,  hint = 0, hint_text = "", has_delete = false, prev_size_x = 64, prev_size_y = 64):
 	self.property_name = property_name
 	self.type = type
 	self.value = value
 	self.hint = hint
 	self.hint_text = hint_text
 	self.has_delete_button = has_delete
+	self.config_prev_size_x = prev_size_x
+	self.config_prev_size_y = prev_size_y
 
 func _ready():
 	# Label describing property
@@ -324,23 +329,29 @@ func create_object_or_image():
 	object_type_line_edit.set_text(str(value))
 	object_type_line_edit.set_h_size_flags(SIZE_EXPAND_FILL)
 	object_type_line_edit.connect("text_changed", self, "property_value_changed", [])
-	if hint_text == "Texture":# or type == TYPE_IMAGE:
+	if hint_text == "Texture":
 		var f = File.new()
 		if value != null and f.file_exists(value):
 			var texture = load(value)
-			var texture_frame = TextureRect.new()
+			var texture_frame: = TextureRect.new()
+			var texture_hover: = PopupPanel.new()
+			var texture_popup: = TextureRect.new()
+			texture_hover.visible = false
 			texture_frame.set_expand(true)
+			texture_popup.set_expand(true)
 			texture_frame.set_custom_minimum_size(Vector2(26, 26))
 			texture_frame.set_texture(texture)
-#			var texture_popup = Popup.new()
-#			var texture_frame_full = TextureRect.new()
-#			texture_frame_full.set_texture(texture)
-#			texture_popup.add_child(texture_frame_full)
-#			texture_popup.set_size(texture.get_size())
-#			texture_frame.set_process_input(true)
-#			texture_frame.connect("input_event", self, "open_image", [])
+			texture_popup.set_texture(texture)
+			if (texture.get_size() > Vector2(int(config_prev_size_x), int(config_prev_size_y))):
+				texture_popup.set_custom_minimum_size(Vector2(int(config_prev_size_x), int(config_prev_size_y)))
+			else:
+				texture_popup.set_custom_minimum_size(texture.get_size())
+			texture_frame.set_process_input(true)
+			texture_hover.add_child(texture_popup)
+			texture_frame.connect("mouse_entered", self, "_on_popup_mouse_over", [texture_hover])
+			texture_frame.connect("mouse_exited", self, "_on_popup_mouse_exit", [texture_hover])
 			control.add_child(texture_frame)
-#			control.add_child(texture_popup)
+			control.add_child(texture_hover)
 	control.add_child(object_type_line_edit)
 	var load_button = ToolButton.new()
 	load_button.set_button_icon(load_icon)
@@ -421,7 +432,17 @@ func string_enum_property_value_changed(value):
 	if str(self.value) != str(value):
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, control.get_popup().get_item_text(value))
-		
+
+func update_preview_sizes(size_x: int, size_y: int):
+	self.config_prev_size_x = size_x
+	self.config_prev_size_y = size_y
 
 func open_image(texture):
-	print("Dovrei aprire un immagine")
+	print("I should open an image")
+
+func _on_popup_mouse_over(texture_hover):
+	texture_hover.visible = true
+	texture_hover.rect_position = get_viewport().get_mouse_position()
+
+func _on_popup_mouse_exit(texture_hover):
+	texture_hover.visible = false

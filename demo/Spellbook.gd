@@ -7,6 +7,7 @@ var icon_spell_unknown = preload("res://graphics/icon_spell_unknown.png")
 func _ready():
 	var all_spells = data.get_items("spell")
 	var i = 0
+	print(all_spells)
 	for spell in all_spells.values():
 		var icon = null
 		if spell.icon:

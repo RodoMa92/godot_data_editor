@@ -19,8 +19,8 @@ onready var no_classes = $"VBox/Body/Content/VBox/NoClasses"
 #onready var created_date = $"VBox/Body/Content/VBox/Container/GridContainer/CreatedDate"
 
 onready var new_custom_property_dialog = $"NewCustomPropertyDialog"
-onready var new_custom_property_name = $"NewCustomPropertyDialog/LineEdit"
-onready var new_custom_property_type_options = $"NewCustomPropertyDialog/TypeOptions"
+onready var new_custom_property_name = $"NewCustomPropertyDialog/VBox/LineEdit"
+onready var new_custom_property_type_options = $"NewCustomPropertyDialog/VBox/TypeOptions"
 
 onready var add_button = $"VBox/Head/Add"
 onready var delete_button = $"VBox/Head/Delete"
@@ -38,8 +38,8 @@ onready var copy_get_item_button = $"VBox/Body/Content/VBox/Container/HBox/CopyG
 onready var input_dialog = $"InputDialog"
 
 onready var new_item_class_dialog = $"NewClassDialog"
-onready var new_item_class_name = $"NewClassDialog/ClassName"
-onready var new_item_class_icon = $"NewClassDialog/ClassIconPath"
+onready var new_item_class_name = $"NewClassDialog/VBoxContainer/HBoxContainer2/ClassName"
+onready var new_item_class_icon = $"NewClassDialog/VBoxContainer/HBoxContainer/ClassIconPath"
 onready var new_item_class_icon_dialog = $"NewClassDialog/ClassIconFileDialog"
 
 onready var warn_dialog = $"WarnDialog"
@@ -244,7 +244,7 @@ func delete_custom_property(property_name):
 func _on_AddClassButton_button_down():
 	new_item_class_name.set_text("")
 	new_item_class_icon.set_text("")
-	new_item_class_icon_dialog.set_current_path("")	
+	new_item_class_icon_dialog.set_current_path("")
 	new_item_class_dialog.popup_centered()
 	new_item_class_name.grab_focus()
 
@@ -284,7 +284,7 @@ func handle_actions(action, argument = ""):
 	elif action == "save":
 		item_manager.save_item(selected_item)
 		item_tree.load_tree()
-			#reload()
+		#reload()
 	elif action == "save_all":
 		item_manager.save_all_items()
 		item_tree.load_tree()

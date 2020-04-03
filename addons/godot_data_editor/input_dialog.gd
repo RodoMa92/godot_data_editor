@@ -22,14 +22,12 @@ func input_dialog_popup(caller, callback_method, title, text, placeholder_1 = ""
 		caller.connect("input_dialog_confirmed", caller, callback_method, [])
 	set_text(text)
 	set_title(title)
-	if placeholder_1 == "":
-		line_edit_1.hide()
-	else:
+	line_edit_1.hide()
+	line_edit_2.hide()
+	if placeholder_1 != "":
 		line_edit_1.show()
 		line_edit_1.set_placeholder(placeholder_1)
-	if placeholder_2 == "":
-		line_edit_2.hide()
-	else:
+	if placeholder_2 != "":
 		line_edit_2.show()
 		line_edit_2.set_placeholder(placeholder_2)
 	line_edit_1.set_text(default_text_1)

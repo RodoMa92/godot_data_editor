@@ -5,6 +5,9 @@ var item = null
 var property_item_class = preload("property_item.tscn")
 var remove_icon = preload("icons/icon_remove.png")
 
+var config_prev_size_x = 0
+var config_prev_size_y = 0
+
 onready var custom_properties_box = $"Body/Scroll/CustomProperties"
 onready var no_custom_properties_label = $"Body/Scroll/CustomProperties/NoCustomPropertiesLabel"
 
@@ -18,8 +21,12 @@ signal custom_property_delete_requested(custom_property_id)
 #TODO: Somehow the properties are initialized twice
 
 func _ready():
-	pass
-	self.item_manager = ProjectSettings.get("item_manager")
+	var config = ConfigFile.new()
+	config.load("res://addons/godot_data_editor/plugin.cfg")
+	self.config_prev_size_x = int(config.get_value("custom", "prev_size_x"))
+	self.config_prev_size_y = int(config.get_value("custom", "prev_size_y"))
+#	pass
+#	self.item_manager = ProjectSettings.get("item_manager")
 		
 func build_properties(item):
 	self.item = item
@@ -42,7 +49,7 @@ func build_properties(item):
 		if properties[property_name].size() == 2:
 			value = properties[property_name][1]
 			
-		property_item.initialize(property_name, type, value, 0, "", true)
+		property_item.initialize(property_name, type, value, 0, "", true, config_prev_size_x, config_prev_size_y)
 		property_item.connect("custom_property_delete_requested", self, "emit_signal", ["custom_property_delete_requested", property_name, ])
 		property_item.connect("property_item_load_button_down", self, "_property_item_requests_file_dialog", [])
 		var changed_values = []
@@ -67,3 +74,11 @@ func delete_custom_property(property_name):
 # Fires signal when the item's custom properties is to be updated, delegates to data_editor_gui.func _on_NewCustomPropertyButton_button_down():
 func _on_NewCustomPropertyButton_button_down():
 	emit_signal("custom_property_add_requested")
+
+
+func _on_OptionsDialog_preview_size_changed(size_x, size_y):
+	self.config_prev_size_x = size_x
+	self.config_prev_size_y = size_y
+	for node in custom_properties_box.get_children():
+		if node.has_meta("property"):
+			node.update_preview_sizes(size_x, size_y)
