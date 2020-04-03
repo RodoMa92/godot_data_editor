@@ -28,10 +28,6 @@ data="*res://addons/godot_data_editor/data.gd"
 
 enabled=PoolStringArray( "godot_data_editor" )
 
-[godot_data_editor]
-
-item_manager="\"[Node:18109]\""
-
 [importer_defaults]
 
 texture={

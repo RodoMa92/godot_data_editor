@@ -37,7 +37,6 @@ func _exit_tree():
 	#get_editor_interface().get_editor_viewport().remove_child(gui)
 	if gui:
 		gui.free()
-	var config = ConfigFile.new()
 	#var status = config.load("res://engine.cfg")
 	#if status == OK:
 	#	if not config.has_section_key("autoload", "data"):
@@ -45,8 +44,6 @@ func _exit_tree():
 	#		config.save("res://engine.cfg")
 			
 		# Check if the Classes and Data folders exist
-	#ProjectSettings.clear("godot_data_editor/item_manager")
-	#ProjectSettings.save()
 
 func _ready():
 	gui.connect("class_edit_requested", self, "edit_class", [])

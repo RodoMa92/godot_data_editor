@@ -79,7 +79,7 @@ func _ready():
 	item_manager.connect("item_insertion_failed", self, "show_warning", [])
 	item_manager.connect("custom_property_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_duplication_failed", self, "show_warning", [])
-#	item_manager.connect("class_is_invalid", self, "show_warning", [])
+	#item_manager.connect("class_is_invalid", self, "show_warning", [])
 	# Add types to the custom property type dropdown
 	var type_names = item_manager.type_names.keys()
 	type_names.sort()

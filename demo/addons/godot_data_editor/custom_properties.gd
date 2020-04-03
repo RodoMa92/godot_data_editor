@@ -26,8 +26,7 @@ func _ready():
 	self.config_prev_size_x = int(config.get_value("custom", "prev_size_x"))
 	self.config_prev_size_y = int(config.get_value("custom", "prev_size_y"))
 	pass
-#	self.item_manager = ProjectSettings.get("item_manager")
-		
+
 func build_properties(item):
 	self.item = item
 	var properties = item._custom_properties
