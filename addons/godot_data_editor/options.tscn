@@ -5,10 +5,10 @@
 [ext_resource path="res://addons/godot_data_editor/icons/icon_load.png" type="Texture" id=3]
 
 [node name="Options" type="AcceptDialog"]
-margin_left = 322.0
-margin_top = 124.0
-margin_right = 722.0
-margin_bottom = 507.0
+margin_left = 365.0
+margin_top = 73.0
+margin_right = 765.0
+margin_bottom = 456.0
 rect_min_size = Vector2( 400, 300 )
 size_flags_vertical = 3
 popup_exclusive = true
@@ -38,7 +38,7 @@ margin_right = 377.0
 margin_bottom = 265.0
 mouse_filter = 0
 custom_constants/vseparation = 10
-custom_constants/hseparation = 5
+custom_constants/hseparation = 10
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -53,7 +53,7 @@ size_flags_vertical = 0
 text = "Serializer"
 
 [node name="SerializerOption" type="OptionButton" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_right = 370.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
@@ -70,7 +70,7 @@ size_flags_vertical = 0
 text = "File Extension"
 
 [node name="ExtensionLineEdit" type="LineEdit" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 30.0
 margin_right = 370.0
 margin_bottom = 54.0
@@ -85,7 +85,7 @@ size_flags_vertical = 0
 text = "Encrypt Files"
 
 [node name="EncryptCheckBox" type="CheckBox" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 64.0
 margin_right = 370.0
 margin_bottom = 88.0
@@ -101,7 +101,7 @@ size_flags_vertical = 0
 text = "Password"
 
 [node name="PasswordLineEdit" type="LineEdit" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 98.0
 margin_right = 370.0
 margin_bottom = 122.0
@@ -116,21 +116,21 @@ size_flags_vertical = 0
 text = "Class Directory"
 
 [node name="ClassDirectoryHBox" type="HBoxContainer" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 132.0
 margin_right = 370.0
 margin_bottom = 156.0
 mouse_filter = 0
 
 [node name="ClassDirectoryLineEdit" type="LineEdit" parent="Panel/GridContainer/ClassDirectoryHBox"]
-margin_right = 183.0
+margin_right = 178.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "res://classes"
 
 [node name="ClassDirectoryButton" type="Button" parent="Panel/GridContainer/ClassDirectoryHBox"]
-margin_left = 187.0
-margin_right = 215.0
+margin_left = 182.0
+margin_right = 210.0
 margin_bottom = 24.0
 icon = ExtResource( 3 )
 
@@ -143,21 +143,21 @@ size_flags_vertical = 0
 text = "Output Directory"
 
 [node name="OutputDirectoryHBox" type="HBoxContainer" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 166.0
 margin_right = 370.0
 margin_bottom = 190.0
 mouse_filter = 0
 
 [node name="OutputDirectoryLineEdit" type="LineEdit" parent="Panel/GridContainer/OutputDirectoryHBox"]
-margin_right = 183.0
+margin_right = 178.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "res://data"
 
 [node name="OutputDirectoryButton" type="Button" parent="Panel/GridContainer/OutputDirectoryHBox"]
-margin_left = 187.0
-margin_right = 215.0
+margin_left = 182.0
+margin_right = 210.0
 margin_bottom = 24.0
 icon = ExtResource( 3 )
 
@@ -170,7 +170,7 @@ size_flags_vertical = 0
 text = "Sanitize IDs"
 
 [node name="SanitizeIdsCheckBox" type="CheckBox" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 200.0
 margin_right = 370.0
 margin_bottom = 224.0
@@ -186,7 +186,7 @@ size_flags_vertical = 0
 text = "File Manager"
 
 [node name="FileManagerEdit" type="LineEdit" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 234.0
 margin_right = 370.0
 margin_bottom = 258.0
@@ -198,19 +198,21 @@ margin_bottom = 301.0
 text = "Maximum preview size"
 
 [node name="SizeVBox" type="VBoxContainer" parent="Panel/GridContainer"]
-margin_left = 155.0
+margin_left = 160.0
 margin_top = 268.0
 margin_right = 370.0
 margin_bottom = 320.0
 
 [node name="x" type="LineEdit" parent="Panel/GridContainer/SizeVBox"]
-margin_right = 215.0
+margin_right = 210.0
 margin_bottom = 24.0
+text = "64"
 
 [node name="y" type="LineEdit" parent="Panel/GridContainer/SizeVBox"]
 margin_top = 28.0
-margin_right = 215.0
+margin_right = 210.0
 margin_bottom = 52.0
+text = "64"
 
 [node name="WarnDialog" type="AcceptDialog" parent="."]
 margin_left = 8.0

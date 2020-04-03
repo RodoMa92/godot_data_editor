@@ -1,3 +1,4 @@
+tool
 extends Node
 
 var item_manager = null
@@ -7,7 +8,7 @@ var values = {}
 
 func _init():
 	# Caution: This item manager may not be in sync with the one used by the editor
-	self.item_manager = preload("item_manager.gd").new()
+	self.item_manager = preload("res://addons/godot_data_editor/item_manager.gd").new()
 	self.items = item_manager.items
 
 func get_item(item_class, id):

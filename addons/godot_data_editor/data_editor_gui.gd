@@ -1,5 +1,5 @@
 tool
-extends Control 
+extends Node
 
 var selected_item = null
 var selected_id = null
@@ -19,8 +19,8 @@ onready var no_classes = $"VBox/Body/Content/VBox/NoClasses"
 #onready var created_date = $"VBox/Body/Content/VBox/Container/GridContainer/CreatedDate"
 
 onready var new_custom_property_dialog = $"NewCustomPropertyDialog"
-onready var new_custom_property_name = $"NewCustomPropertyDialog/LineEdit"
-onready var new_custom_property_type_options = $"NewCustomPropertyDialog/TypeOptions"
+onready var new_custom_property_name = $"NewCustomPropertyDialog/VBox/LineEdit"
+onready var new_custom_property_type_options = $"NewCustomPropertyDialog/VBox/TypeOptions"
 
 onready var add_button = $"VBox/Head/Add"
 onready var delete_button = $"VBox/Head/Delete"
@@ -38,8 +38,8 @@ onready var copy_get_item_button = $"VBox/Body/Content/VBox/Container/HBox/CopyG
 onready var input_dialog = $"InputDialog"
 
 onready var new_item_class_dialog = $"NewClassDialog"
-onready var new_item_class_name = $"NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer2/ClassName"
-onready var new_item_class_icon = $"NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer/ClassIconPath"
+onready var new_item_class_name = $"NewClassDialog/VBoxContainer/HBoxContainer2/ClassName"
+onready var new_item_class_icon = $"NewClassDialog/VBoxContainer/HBoxContainer/ClassIconPath"
 onready var new_item_class_icon_dialog = $"NewClassDialog/ClassIconFileDialog"
 
 onready var warn_dialog = $"WarnDialog"
@@ -54,10 +54,10 @@ signal input_dialog_confirmed(text1, text2)
 
 # First initialize the item manager which is used for loading, saving and configs
 func _init():
-	item_manager = preload("item_manager.gd").new()			# This item_manager will add itself to the globals
+	item_manager = data.item_manager			# This item_manager will add itself to the globals
 
-func _ready():	
-	ProjectSettings.set("debug_is_editor", false)
+func _ready():
+	#ProjectSettings.set("debug_is_editor", false)
 	# Tree signals
 	item_tree.connect("on_new_item_pressed", self, "handle_actions", ["add"])
 	item_tree.connect("on_rename_pressed", self, "handle_actions", ["rename"])

@@ -25,7 +25,7 @@ func _ready():
 	config.load("res://addons/godot_data_editor/plugin.cfg")
 	self.config_prev_size_x = int(config.get_value("custom", "prev_size_x"))
 	self.config_prev_size_y = int(config.get_value("custom", "prev_size_y"))
-#	pass
+	pass
 #	self.item_manager = ProjectSettings.get("item_manager")
 		
 func build_properties(item):
@@ -74,7 +74,6 @@ func delete_custom_property(property_name):
 # Fires signal when the item's custom properties is to be updated, delegates to data_editor_gui.func _on_NewCustomPropertyButton_button_down():
 func _on_NewCustomPropertyButton_button_down():
 	emit_signal("custom_property_add_requested")
-
 
 func _on_OptionsDialog_preview_size_changed(size_x, size_y):
 	self.config_prev_size_x = size_x

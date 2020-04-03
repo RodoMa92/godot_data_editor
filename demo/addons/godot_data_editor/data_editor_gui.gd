@@ -1,5 +1,5 @@
 tool
-extends Control 
+extends Node
 
 var selected_item = null
 var selected_id = null
@@ -54,10 +54,10 @@ signal input_dialog_confirmed(text1, text2)
 
 # First initialize the item manager which is used for loading, saving and configs
 func _init():
-	item_manager = preload("item_manager.gd").new()			# This item_manager will add itself to the globals
+	item_manager = data.item_manager			# This item_manager will add itself to the globals
 
-func _ready():	
-	ProjectSettings.set("debug_is_editor", false)
+func _ready():
+	#ProjectSettings.set("debug_is_editor", false)
 	# Tree signals
 	item_tree.connect("on_new_item_pressed", self, "handle_actions", ["add"])
 	item_tree.connect("on_rename_pressed", self, "handle_actions", ["rename"])

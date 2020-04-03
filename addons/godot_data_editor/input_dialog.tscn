@@ -3,10 +3,12 @@
 [ext_resource path="res://addons/godot_data_editor/input_dialog.gd" type="Script" id=1]
 
 [node name="ConfirmationDialog" type="ConfirmationDialog"]
-margin_right = 440.0
-margin_bottom = 150.0
+margin_left = 323.0
+margin_top = 241.0
+margin_right = 642.0
+margin_bottom = 379.0
 popup_exclusive = true
-window_title = "Please Confirm..."
+window_title = "Per Favore Conferma..."
 dialog_text = "Text"
 script = ExtResource( 1 )
 
@@ -15,22 +17,27 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 8.0
-margin_top = -128.0
+margin_top = -116.0
 margin_right = -8.0
 margin_bottom = -36.0
 mouse_filter = 0
 custom_constants/separation = 10
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LineEdit1" type="LineEdit" parent="VBox"]
-margin_right = 424.0
-margin_bottom = 24.0
+margin_top = 11.0
+margin_right = 303.0
+margin_bottom = 35.0
 size_flags_horizontal = 3
 placeholder_text = "Hint 1"
 
 [node name="LineEdit2" type="LineEdit" parent="VBox"]
-margin_top = 34.0
-margin_right = 424.0
-margin_bottom = 58.0
+margin_top = 45.0
+margin_right = 303.0
+margin_bottom = 69.0
 size_flags_horizontal = 3
 placeholder_text = "Hint 2"
 [connection signal="confirmed" from="." to="." method="_on_ConfirmationDialog_confirmed"]

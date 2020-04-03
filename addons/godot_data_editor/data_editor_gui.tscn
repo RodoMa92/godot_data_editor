@@ -371,10 +371,10 @@ window_title = ""
 script = ExtResource( 19 )
 
 [node name="NewClassDialog" type="ConfirmationDialog" parent="."]
-margin_left = 396.0
-margin_top = 193.0
-margin_right = 766.0
-margin_bottom = 367.0
+margin_left = 400.0
+margin_top = 177.0
+margin_right = 770.0
+margin_bottom = 351.0
 popup_exclusive = true
 window_title = "New Class"
 dialog_text = "Enter the name and the path to an optional icon:"
@@ -396,51 +396,51 @@ filters = PoolStringArray( "*.png" )
 current_dir = "/home/marco/Developer/Godot/godot_data_editor/demo"
 current_path = "/home/marco/Developer/Godot/godot_data_editor/demo/"
 
-[node name="CenterContainer" type="CenterContainer" parent="NewClassDialog"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NewClassDialog"]
 margin_left = 8.0
 margin_top = 22.0
 margin_right = 362.0
 margin_bottom = 138.0
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NewClassDialog/CenterContainer"]
-margin_left = 53.0
-margin_top = 32.0
-margin_right = 300.0
-margin_bottom = 84.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="NewClassDialog/VBoxContainer"]
+margin_top = 29.0
+margin_right = 354.0
+margin_bottom = 53.0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="NewClassDialog/CenterContainer/VBoxContainer"]
-margin_right = 247.0
-margin_bottom = 24.0
-
-[node name="ClassName" type="LineEdit" parent="NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 247.0
+[node name="ClassName" type="LineEdit" parent="NewClassDialog/VBoxContainer/HBoxContainer2"]
+margin_right = 354.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 247, 0 )
 focus_neighbour_bottom = NodePath("../ClassIconPath")
+size_flags_horizontal = 3
 placeholder_text = "Name"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="NewClassDialog/CenterContainer/VBoxContainer"]
-margin_top = 28.0
-margin_right = 247.0
-margin_bottom = 52.0
+[node name="HBoxContainer" type="HBoxContainer" parent="NewClassDialog/VBoxContainer"]
+margin_top = 63.0
+margin_right = 354.0
+margin_bottom = 87.0
+alignment = 1
 
-[node name="ClassIconPath" type="LineEdit" parent="NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer"]
-margin_right = 189.0
+[node name="ClassIconPath" type="LineEdit" parent="NewClassDialog/VBoxContainer/HBoxContainer"]
+margin_right = 296.0
 margin_bottom = 24.0
 focus_neighbour_top = NodePath("../ClassName")
 focus_neighbour_right = NodePath("../NewClassIconSearchButton")
 size_flags_horizontal = 3
 placeholder_text = "Icon Path (optional)"
 
-[node name="NewClassIconSearchButton" type="Button" parent="NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer"]
-margin_left = 193.0
-margin_right = 247.0
+[node name="NewClassIconSearchButton" type="Button" parent="NewClassDialog/VBoxContainer/HBoxContainer"]
+margin_left = 300.0
+margin_right = 354.0
 margin_bottom = 24.0
 focus_neighbour_left = NodePath("../ClassIconPath")
 text = "Search"
@@ -449,42 +449,60 @@ __meta__ = {
 }
 
 [node name="OptionsDialog" parent="." instance=ExtResource( 20 )]
-margin_left = 394.0
-margin_top = 144.0
-margin_right = 794.0
-margin_bottom = 547.0
+margin_left = 397.0
+margin_top = 134.0
+margin_right = 797.0
+margin_bottom = 537.0
 
 [node name="InputDialog" parent="." instance=ExtResource( 21 )]
+margin_left = 401.0
+margin_top = 5.0
+margin_right = 770.0
+margin_bottom = 155.0
 
 [node name="NewCustomPropertyDialog" type="ConfirmationDialog" parent="."]
-margin_left = 350.0
-margin_top = 260.0
-margin_right = 722.0
-margin_bottom = 386.0
+margin_left = 391.0
+margin_top = 192.0
+margin_right = 763.0
+margin_bottom = 335.0
 window_title = "New custom property"
-dialog_text = "Enter the name and type of the property"
+dialog_text = "Enter the name and type of the property:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEdit" type="LineEdit" parent="NewCustomPropertyDialog"]
+[node name="VBox" type="VBoxContainer" parent="NewCustomPropertyDialog"]
 margin_left = 8.0
 margin_top = 22.0
 margin_right = 364.0
-margin_bottom = 90.0
-focus_neighbour_bottom = NodePath("../TypeOptions")
-size_flags_horizontal = 3
-placeholder_text = "Name"
+margin_bottom = 107.0
+custom_constants/separation = 10
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TypeOptions" type="OptionButton" parent="NewCustomPropertyDialog"]
-margin_left = 8.0
-margin_top = 22.0
-margin_right = 364.0
-margin_bottom = 90.0
+[node name="LineEdit" type="LineEdit" parent="NewCustomPropertyDialog/VBox"]
+margin_top = 15.0
+margin_right = 356.0
+margin_bottom = 39.0
+focus_neighbour_bottom = NodePath("../TypeOptions")
+placeholder_text = "Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TypeOptions" type="OptionButton" parent="NewCustomPropertyDialog/VBox"]
+margin_top = 49.0
+margin_right = 356.0
+margin_bottom = 69.0
 focus_neighbour_top = NodePath("../LineEdit")
 text = "BOOL"
 items = [ "BOOL", null, false, 0, 1, "COLOR", null, false, 1, 14, "INT", null, false, 2, 2, "NODE_PATH", null, false, 3, 15, "OBJECT", null, false, 4, 17, "PLANE", null, false, 5, 9, "QUAT", null, false, 6, 10, "REAL", null, false, 7, 3, "RECT2", null, false, 8, 6, "STRING", null, false, 9, 4, "TRANSFORM", null, false, 10, 13, "VECTOR2", null, false, 11, 5, "VECTOR3", null, false, 12, 7 ]
 selected = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="button_down" from="VBox/Head/Add" to="." method="handle_actions" binds= [ "add" ]]
 [connection signal="button_down" from="VBox/Head/Save" to="." method="handle_actions" binds= [ "save" ]]
 [connection signal="button_down" from="VBox/Head/SaveAll" to="." method="handle_actions" binds= [ "save_all" ]]
@@ -500,7 +518,7 @@ selected = 0
 [connection signal="button_down" from="VBox/Body/Content/VBox/Container/HBox/EditClass" to="." method="handle_actions" binds= [ "edit_class" ]]
 [connection signal="confirmed" from="NewClassDialog" to="." method="_on_NewClassDialog_confirmed"]
 [connection signal="file_selected" from="NewClassDialog/ClassIconFileDialog" to="." method="_on_NewClassIconFileDialog_file_selected"]
-[connection signal="button_down" from="NewClassDialog/CenterContainer/VBoxContainer/HBoxContainer/NewClassIconSearchButton" to="." method="_on_NewClassIconSearchButton_button_down"]
+[connection signal="button_down" from="NewClassDialog/VBoxContainer/HBoxContainer/NewClassIconSearchButton" to="." method="_on_NewClassIconSearchButton_button_down"]
 [connection signal="preview_size_changed" from="OptionsDialog" to="VBox/Body/Content/VBox/InstanceDetails/HBox/ClassProperties" method="_on_OptionsDialog_preview_size_changed"]
 [connection signal="preview_size_changed" from="OptionsDialog" to="VBox/Body/Content/VBox/InstanceDetails/HBox/CustomProperties" method="_on_OptionsDialog_preview_size_changed"]
 [connection signal="confirmed" from="NewCustomPropertyDialog" to="." method="_on_NewCustomPropertyDialog_confirmed"]

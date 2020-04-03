@@ -45,7 +45,7 @@ func _exit_tree():
 	#		config.save("res://engine.cfg")
 			
 		# Check if the Classes and Data folders exist
-	ProjectSettings.clear("item_manager")
+	ProjectSettings.clear("godot_data_editor/item_manager")
 	ProjectSettings.save()
 
 func _ready():
