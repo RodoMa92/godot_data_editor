@@ -42,7 +42,7 @@ func load_tree(is_reload = false):
 	save_collapsed_state()
 	plugin_config = ConfigFile.new()
 	plugin_config.load("res://addons/godot_data_editor/plugin.cfg")
-	self.item_manager = preload("res://addons/godot_data_editor/item_manager.gd").new()
+	self.item_manager = data.item_manager
 	tree_elements = {}
 	tree_roots = {}
 	last_selected_id = ""
