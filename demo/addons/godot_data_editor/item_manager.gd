@@ -54,7 +54,6 @@ func load_manager():
 	set_up_item_folders()
 	load_items()
 	reload_unsaved_items()
-	#ProjectSettings.set("godot_data_editor/item_manager", to_json(self))
 
 # Try to keep unsaved changes when (re)loading the item_manager
 var unsaved_items = []

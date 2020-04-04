@@ -1,4 +1,3 @@
-tool
 extends Node
 
 var item_manager = null

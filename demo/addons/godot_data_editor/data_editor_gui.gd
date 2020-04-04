@@ -194,7 +194,7 @@ func change_item_context(selected_item, selected_class):
 		if item_manager.invalid_classes.has(selected_class):
 			class_overview.set_label("There is a problem with this class, please check if there are any issues. Press 'Reload' once you are ready.")
 		else:
-			class_overview.set_label("")	
+			class_overview.set_label("")
 		class_overview.show()
 		instance_details.hide()
 		no_classes.hide()
@@ -222,6 +222,7 @@ func reload():
 
 func toggle_item_dirty_state(item):
 	item._dirty = true
+	print(item_tree)
 	item_tree.set_tree_item_label_text(item)
 
 # Validation takes place in the item manager
