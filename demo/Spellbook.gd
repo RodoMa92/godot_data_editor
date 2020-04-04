@@ -13,7 +13,6 @@ func _ready():
 			icon = load(spell.icon)
 		else:
 			icon = icon_spell_unknown
-		print(spell.itemname)
 		spell_list.add_item(spell.itemname, icon)
 		spell_list.set_item_tooltip(i, spell.itemname)
 		spell_list.set_item_metadata(i, spell)
