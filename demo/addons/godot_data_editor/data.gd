@@ -7,7 +7,12 @@ var values = {}
 
 
 func _init():
-	# Caution: This item manager may not be in sync with the one used by the editor
+	# Caution: This item manager may not be in sync with the one used by the editor.
+	# With the data autoloaded and set as a tool, we should have this as the only
+	# class syncronized beetween the tool and the game engine. The only possible issue is
+	# is data coherency (database like problems) without syncronization routines in place,
+	# since the earlier implementation with .set(self) wasn't working correctly
+	# anymore (it was saving, but it was breaking the project file after a while).
 	self.item_manager = preload("res://addons/godot_data_editor/item_manager.gd").new()
 	self.items = item_manager.items
 

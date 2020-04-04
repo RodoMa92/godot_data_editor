@@ -39,7 +39,6 @@ func build_properties(item):
 	for property_name in property_names:
 		no_custom_properties_label.hide()
 		number_of_properties += 1
-		
 		var container = MarginContainer.new()
 		var property_item = property_item_class.instance()
 		var type = properties[property_name][0]
@@ -47,7 +46,6 @@ func build_properties(item):
 		var value = null
 		if properties[property_name].size() == 2:
 			value = properties[property_name][1]
-			
 		property_item.initialize(property_name, type, value, 0, "", true, config_prev_size_x, config_prev_size_y)
 		property_item.connect("custom_property_delete_requested", self, "emit_signal", ["custom_property_delete_requested", property_name, ])
 		property_item.connect("property_item_load_button_down", self, "_property_item_requests_file_dialog", [])
@@ -58,13 +56,13 @@ func build_properties(item):
 		custom_properties_box.add_child(container)
 	pass
 	if number_of_properties == 0:
-		no_custom_properties_label.show()	
+		no_custom_properties_label.show()
 
 # Fires signal when the item's custom properties is to be updated, delegates to data_editor_gui.
 func item_changed(property, value):
 	if item:
 		item._custom_properties[property][1] = value
-		emit_signal("on_item_changed", item)	
+		emit_signal("on_item_changed", item)
 
 # Delegates the deletion 
 func delete_custom_property(property_name):

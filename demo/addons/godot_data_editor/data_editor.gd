@@ -9,7 +9,7 @@ var all_items = {}
 
 signal data_item_class_opened(item_class)
 
-func _enter_tree():	
+func _enter_tree():
 	OS.set_low_processor_usage_mode(true)
 	name = "Data Editor"
 	# Currently, adding the singleton automatically, does not work
@@ -70,12 +70,12 @@ func check_plugin_settings():
 	if status == OK:
 		if not config.has_section_key("custom", "class_directory"):
 			config.set_value("custom", "class_directory", "res://classes")
-			# TODO: Create folders	
+			# TODO: Create folders
 		if not config.has_section_key("custom", "extension"):
 			config.set_value("custom", "extension", "json")
 		if not config.has_section_key("custom", "output_directory"):
 			config.set_value("custom", "output_directory", "res://data")
-			# TODO: Create folders	
+			# TODO: Create folders
 		if not config.has_section_key("custom", "password"):
 			config.set_value("custom", "password", "")
 		if not config.has_section_key("custom", "sanitize_ids"):

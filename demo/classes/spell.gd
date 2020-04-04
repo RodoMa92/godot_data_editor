@@ -1,6 +1,6 @@
 extends "res://addons/godot_data_editor/data_item.gd"
 
-export(String) var itemname = ""
+export(String) var spell_name = ""
 export(String, MULTILINE) var description = ""
 export(String, "water", "fire", "wind", "earth") var element = "water"
 export(Texture) var icon = null

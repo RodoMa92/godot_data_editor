@@ -16,9 +16,6 @@ var _last_modified = 0
 # Instance-level custom properties, consists of arrays containing name, type, (hint and hint_text), default value
 var _custom_properties = {}
 
-func _ready():
-	pass
-
 func get_class():
 	if _class:
 		return _class

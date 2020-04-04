@@ -17,7 +17,7 @@ debug_is_editor=true
 [application]
 
 config/name="demo"
-run/main_scene="res://Spellbook.tscn"
+run/main_scene="res://ShopTest.tscn"
 config/icon="res://icon.png"
 
 [autoload]

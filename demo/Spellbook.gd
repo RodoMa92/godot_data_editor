@@ -13,8 +13,8 @@ func _ready():
 			icon = load(spell.icon)
 		else:
 			icon = icon_spell_unknown
-		spell_list.add_item(spell.itemname, icon)
-		spell_list.set_item_tooltip(i, spell.itemname)
+		spell_list.add_item(spell.spell_name, icon)
+		spell_list.set_item_tooltip(i, spell.spell_name)
 		spell_list.set_item_metadata(i, spell)
 		i = i + 1
 	spell_list.select(0)
@@ -22,8 +22,8 @@ func _ready():
 
 func _on_SpellList_item_selected( index ):
 	var spell = spell_list.get_item_metadata(index)
-	get_node("RightVBox/SkillName").set_text(spell.itemname)
+	get_node("RightVBox/SkillName").set_text(spell.spell_name)
 	get_node("RightVBox/Description").set_text(spell.description)
 	var element = data.get_item("element", spell.element)
-	get_node("RightVBox/Type").set_bbcode("[color=#" + element.color.to_html() + "]" + element.name + "[/color]")
+	get_node("RightVBox/Type").set_bbcode("[color=#" + element.color.to_html() + "]" + element.element_name + "[/color]")
 	get_node("RightVBox/BaseDamage").set_text("Base Damage: " + str(spell.base_damage))

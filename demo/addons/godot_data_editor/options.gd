@@ -111,8 +111,6 @@ func _on_Options_confirmed():
 		extension = extension.replace(".", "")
 	# TODO: Validate
 	var error_message = ""
-#	if self.serializer != "binary" or self.serializer != "json":
-#		error_message = tr("Please choose either 'json' or 'binary' as serializer.\n")
 	if self.extension == "":
 		error_message = tr("Please choose a valid file extension, e.g. 'gob' or 'json'.")
 	if self.class_directory == "" or not self.class_directory.begins_with("res://"):

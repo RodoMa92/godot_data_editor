@@ -92,7 +92,7 @@ func _ready():
 	# No classes available
 	var has_no_classes = item_manager.classes.size() == 0
 	if has_no_classes:
-		change_display_name_button.set_disabled(has_no_classes)		
+		change_display_name_button.set_disabled(has_no_classes)
 		duplicate_button.set_disabled(true)
 		save_button.set_disabled(true)
 		save_all_button.set_disabled(true)
@@ -127,7 +127,7 @@ func open_item():
 		program = "nautilus"
 	OS.execute(program, [item_path], false)
 
-func change_item_context(selected_item, selected_class):	
+func change_item_context(selected_item, selected_class):
 	if selected_class:
 		self.selected_class = selected_class
 	# TODO: Move to method, clean up

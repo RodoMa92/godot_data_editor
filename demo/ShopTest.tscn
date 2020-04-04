@@ -14,3 +14,13 @@ margin_bottom = 14.0
 mouse_filter = 1
 size_flags_vertical = 0
 text = "Open this scene to test items and shops."
+
+[node name="ShopButtons" type="VBoxContainer" parent="."]
+margin_left = 450.0
+margin_top = 207.0
+margin_right = 619.0
+margin_bottom = 376.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

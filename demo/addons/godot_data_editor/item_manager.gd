@@ -121,7 +121,7 @@ func load_classes():
 		var error = classes[item_class].reload(true)
 		if not error == OK or not classes[item_class]:
 			emit_signal("class_is_invalid", item_class)
-			invalid_classes.append(item_class)			
+			invalid_classes.append(item_class)
 	pass
 
 # Creates the directories for the items if they do not yet exist
@@ -288,13 +288,12 @@ func save_json_item(item):
 	var dict = {}
 	if status == OK:
 		for property in item.get_property_list():
-			# Serialize each property			
+			# Serialize each property
 			var property_name = property["name"].json_escape()
 			var property_usage = property["usage"]
 			if property_usage >= PROPERTY_USAGE_SCRIPT_VARIABLE and not property_name in property_blacklist:
 				var type = typeof(item.get(property_name))
 				var value = item.get(property_name)
-				
 				# Custom properties are handled separately since they are stored as arrays
 				if property_name == "_custom_properties":
 					dict["_custom_properties"] = {}
@@ -302,7 +301,7 @@ func save_json_item(item):
 						type = value[custom_property][0]
 						var sanitized_value = sanitize_variant(value[custom_property][1], type)
 						dict["_custom_properties"][custom_property] =  [sanitized_value, type]
-					pass	
+					pass
 				# Normal properties are simply stored as type-value pairs in an array
 				else:
 					value = sanitize_variant(value, type)
@@ -448,7 +447,6 @@ func create_class(name, icon_path):
 	var directory = Directory.new()
 	if not directory.dir_exists(config_class_directory):
 		directory.make_dir(config_class_directory)
-
 	name = sanitize_string(name)
 	if name == "":
 		emit_signal("class_insertion_failed", tr("Invalid name"), tr("The class name cannot be empty."))
@@ -456,12 +454,10 @@ func create_class(name, icon_path):
 	elif class_names.has(name):
 		emit_signal("class_insertion_failed", tr("Invalid name"), tr("The class name already exists."))
 		return 
-
 	# Handle icons
 	var icon_file = File.new()
 	if icon_path == "" or not icon_file.file_exists(icon_path):
 		icon_path = "res://addons/godot_data_editor/icons/icon_empty.png"
-
 	var icon_resource = load(icon_path)
 	var icon_data = icon_resource.get_data()
 	if icon_data.get_width() <= 22 and icon_data.get_height() <= 22:
@@ -473,7 +469,6 @@ func create_class(name, icon_path):
 	else:
 		emit_signal("class_insertion_failed", tr("Invalid icon size"), tr("Icon must be smaller than 22x22 pixels."))
 		return
-
 	# Create class
 	var class_source = ""
 	class_source += "extends \"res://addons/godot_data_editor/data_item.gd\"\n\n"
@@ -483,12 +478,10 @@ func create_class(name, icon_path):
 	class_source += "\n\n\n"
 	class_source += "func _init(id).(id):\n"
 	class_source += "\tpass\n"
-
 	var script_file = File.new()
 	directory = Directory.new()
 	if not directory.dir_exists(config_class_directory):
 		directory.make_dir(config_class_directory)
-
 	script_file.open(config_class_directory + "/" + name + ".gd", File.WRITE)
 	script_file.store_string(class_source)
 	script_file.close()
@@ -524,11 +517,10 @@ func rename_class(item_class, new_item_class):
 	var directory = Directory.new()
 	if new_item_class == "":
 		emit_signal("class_insertion_failed", tr("Invalid name"), tr("The class name cannot be empty."))
-		return 
+		return
 	elif class_names.has(new_item_class):
 		emit_signal("class_insertion_failed", tr("Invalid name"), tr("The class name already exists."))
-		return 
-
+		return
 	directory.rename(config_class_directory + item_class + ".gd", config_class_directory + new_item_class + ".gd")
 	directory.rename(config_class_directory + item_class + ".png", config_class_directory + new_item_class + ".png")
 	directory.rename(config_output_directory + "/" + item_class, config_output_directory + "/" + new_item_class)
