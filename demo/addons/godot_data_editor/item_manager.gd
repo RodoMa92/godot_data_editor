@@ -248,6 +248,7 @@ func save_all_items():
 
 # Stores an item on the disk and updates the "last modified" property
 func save_item(item):
+	print(item)
 	if item:
 		item._last_modified= OS.get_unix_time()
 		if config_serializer == "json":

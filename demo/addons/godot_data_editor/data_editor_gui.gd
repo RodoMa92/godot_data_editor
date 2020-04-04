@@ -54,7 +54,7 @@ signal input_dialog_confirmed(text1, text2)
 
 # First initialize the item manager which is used for loading, saving and configs
 func _init():
-	item_manager = preload("res://addons/godot_data_editor/item_manager.gd").new()			# This item_manager will add itself to the globals
+	item_manager = data.item_manager			# This item_manager will add itself to the globals
 
 func _ready():
 	#ProjectSettings.set("debug_is_editor", false)
@@ -222,7 +222,6 @@ func reload():
 
 func toggle_item_dirty_state(item):
 	item._dirty = true
-	print(item_tree)
 	item_tree.set_tree_item_label_text(item)
 
 # Validation takes place in the item manager
