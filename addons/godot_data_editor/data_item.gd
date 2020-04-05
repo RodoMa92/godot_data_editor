@@ -16,9 +16,6 @@ var _last_modified = 0
 # Instance-level custom properties, consists of arrays containing name, type, (hint and hint_text), default value
 var _custom_properties = {}
 
-func _ready():
-	pass
-
 func get_class():
 	if _class:
 		return _class
@@ -39,7 +36,7 @@ func set_display_name(name):
 	_display_name = name
 
 func update_property(property, value):
-	var data_singleton = ProjectSettings.get_singleton("data")
+	var data_singleton = data
 	if data_singleton:
 		data_singleton.set_progress(_class, _id, property, value)
 

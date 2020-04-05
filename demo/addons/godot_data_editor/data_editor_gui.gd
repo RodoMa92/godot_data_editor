@@ -48,6 +48,7 @@ onready var options_screen = $"OptionsDialog"
 var item_tree_class = preload("item_tree.tscn")
 #var active_element = null
 var item_manager = null
+var need_reload = false
 
 signal class_edit_requested(script)
 signal input_dialog_confirmed(text1, text2)

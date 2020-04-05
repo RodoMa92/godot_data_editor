@@ -48,6 +48,7 @@ onready var options_screen = $"OptionsDialog"
 var item_tree_class = preload("item_tree.tscn")
 #var active_element = null
 var item_manager = null
+var need_reload = false
 
 signal class_edit_requested(script)
 signal input_dialog_confirmed(text1, text2)
@@ -79,7 +80,7 @@ func _ready():
 	item_manager.connect("item_insertion_failed", self, "show_warning", [])
 	item_manager.connect("custom_property_insertion_failed", self, "show_warning", [])
 	item_manager.connect("item_duplication_failed", self, "show_warning", [])
-#	item_manager.connect("class_is_invalid", self, "show_warning", [])
+	#item_manager.connect("class_is_invalid", self, "show_warning", [])
 	# Add types to the custom property type dropdown
 	var type_names = item_manager.type_names.keys()
 	type_names.sort()
@@ -92,7 +93,7 @@ func _ready():
 	# No classes available
 	var has_no_classes = item_manager.classes.size() == 0
 	if has_no_classes:
-		change_display_name_button.set_disabled(has_no_classes)		
+		change_display_name_button.set_disabled(has_no_classes)
 		duplicate_button.set_disabled(true)
 		save_button.set_disabled(true)
 		save_all_button.set_disabled(true)
@@ -127,7 +128,7 @@ func open_item():
 		program = "nautilus"
 	OS.execute(program, [item_path], false)
 
-func change_item_context(selected_item, selected_class):	
+func change_item_context(selected_item, selected_class):
 	if selected_class:
 		self.selected_class = selected_class
 	# TODO: Move to method, clean up
@@ -194,7 +195,7 @@ func change_item_context(selected_item, selected_class):
 		if item_manager.invalid_classes.has(selected_class):
 			class_overview.set_label("There is a problem with this class, please check if there are any issues. Press 'Reload' once you are ready.")
 		else:
-			class_overview.set_label("")	
+			class_overview.set_label("")
 		class_overview.show()
 		instance_details.hide()
 		no_classes.hide()

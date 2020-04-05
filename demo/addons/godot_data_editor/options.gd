@@ -19,9 +19,11 @@ onready var sanitize_ids_label = $"Panel/GridContainer/SanitizeIdsLabel"
 onready var sanitize_ids_check_box = $"Panel/GridContainer/SanitizeIdsCheckBox"
 onready var file_manager_label = $"Panel/GridContainer/FileManagerLabel"
 onready var file_manager_edit = $"Panel/GridContainer/FileManagerEdit"
-onready var max_prev_size_label = $"Panel/GridContainer/MaxPrevSizeLabel"
-onready var prev_size_x_edit = $"Panel/GridContainer/SizeVBox/x"
-onready var prev_size_y_edit = $"Panel/GridContainer/SizeVBox/y"
+onready var max_prev_size_label = $"Panel/GridContainer2/MaxPrevSizeLabel"
+onready var prev_size_x_edit = $"Panel/GridContainer2/SizeVBox/x"
+onready var prev_size_y_edit = $"Panel/GridContainer2/SizeVBox/y"
+onready var timeout_label = $"Panel/GridContainer2/TimeoutLabel"
+onready var timeout_slider = $"Panel/GridContainer2/TimeoutSlider"
 
 onready var warn_dialog = $"WarnDialog"
 
@@ -34,12 +36,13 @@ var output_directory = ""
 var file_manager = ""
 var prev_size_x = ""
 var prev_size_y = ""
+var timeout: float = 0
 var sanitize_ids = true
 
 signal extension_changed(new_extension, serializer)
 signal encryption_changed(is_encrypted, password)
 signal file_editor_changed
-signal preview_size_changed(size_x, size_y)
+signal preview_parameters_changed(size_x, size_y, timeout)
 
 func _ready():
 	self.set_title(tr("Options"))
@@ -60,8 +63,9 @@ func _ready():
 	password = config.get_value("custom", "password")
 	output_directory = config.get_value("custom", "output_directory")
 	file_manager = config.get_value("custom", "file_manager")
-	prev_size_x = config.get_value("custom", "prev_size_x", "64")
-	prev_size_y = config.get_value("custom", "prev_size_y", "64")
+	prev_size_x = config.get_value("custom", "prev_size_x")
+	prev_size_y = config.get_value("custom", "prev_size_y")
+	timeout = config.get_value("custom", "timeout")
 	serializer_option.clear()
 	serializer_option.add_item("json", 0)
 	serializer_option.add_item("binary", 1)
@@ -91,6 +95,7 @@ func _ready():
 	file_manager_edit.set_text(str(file_manager))
 	prev_size_x_edit.set_text(str(prev_size_x))
 	prev_size_y_edit.set_text(str(prev_size_y))
+	timeout_slider.set_value(timeout)
 
 func _on_SerializerOption_item_selected(index):
 	if index == 0:
@@ -130,8 +135,11 @@ func _on_Options_confirmed():
 		error_message = tr("Please insert a positive integer as preview sizes for the popup preview.")
 	var cur_val_x = int(self.prev_size_x_edit.get_text())
 	var cur_val_y = int(self.prev_size_y_edit.get_text())
-	if int(config.get_value("custom", "prev_size_x")) != cur_val_x or int(config.get_value("custom", "prev_size_y")) != cur_val_y:
-		emit_signal("preview_size_changed", int(self.prev_size_x_edit.get_text()), int(self.prev_size_y_edit.get_text()))
+	var cur_timeout = self.timeout_slider.get_value()
+	if config.get_value("custom", "prev_size_x") != cur_val_x or \
+		config.get_value("custom", "prev_size_y") != cur_val_y or \
+		config.get_value("custom","timeout") != cur_timeout:
+		emit_signal("preview_parameters_changed", cur_val_x, cur_val_y, cur_timeout)
 	if error_message == "":
 		config.set_value("custom", "extension", extension)
 		config.set_value("custom", "serializer", serializer)
@@ -141,8 +149,9 @@ func _on_Options_confirmed():
 		config.set_value("custom", "output_directory", output_directory)
 		config.set_value("custom", "sanitize_ids", sanitize_ids)
 		config.set_value("custom", "file_manager", file_manager)
-		config.set_value("custom", "prev_size_x", String(int(prev_size_x)))
-		config.set_value("custom", "prev_size_y", String(int(prev_size_y)))
+		config.set_value("custom", "prev_size_x", int(prev_size_x))
+		config.set_value("custom", "prev_size_y", int(prev_size_y))
+		config.set_value("custom", "timeout", timeout)
 		# Reupdating the text fields, otherwise they will still show the decimal, 
 		# even if it was removed
 		prev_size_x_edit.set_text(String(int(prev_size_x)))
@@ -171,6 +180,7 @@ func extract_values():
 	file_manager = file_manager_edit.get_text()
 	prev_size_x = prev_size_x_edit.get_text()
 	prev_size_y = prev_size_y_edit.get_text()
+	timeout = timeout_slider.get_value()
 
 func _on_ClassDirectoryButton_button_down():
 	var dialog = EditorFileDialog.new()

@@ -27,15 +27,16 @@ var value_editor = []
 var dialog = null
 var object_type_line_edit = null
 
-var config_prev_size_x = 0
-var config_prev_size_y = 0
+var config_prev_size_x: int = 0
+var config_prev_size_y: int = 0
+var timer_timeout: float = .5
 
 signal on_property_value_changed(property, value)
 signal property_item_load_button_down(property_item)
 signal custom_property_delete_requested(property_name)
 
 # has_delete is used for custom properties
-func initialize(property_name, type, value = null,  hint = 0, hint_text = "", has_delete = false, prev_size_x = 64, prev_size_y = 64):
+func initialize(property_name, type, value = null,  hint = 0, hint_text = "", has_delete = false, prev_size_x = 64, prev_size_y = 64, timeout = .5):
 	self.property_name = property_name
 	self.type = type
 	self.value = value
@@ -44,7 +45,11 @@ func initialize(property_name, type, value = null,  hint = 0, hint_text = "", ha
 	self.has_delete_button = has_delete
 	self.config_prev_size_x = prev_size_x
 	self.config_prev_size_y = prev_size_y
-
+	self.timer_timeout = timeout
+"""
+Here each table row is created with a dedicated method specific for the type of
+object added to the database.
+"""
 func _ready():
 	# Label describing property
 	var property_label = Label.new()
@@ -83,7 +88,7 @@ func _ready():
 	elif type == TYPE_TRANSFORM:
 		control = create_custom_editor_button(value);
 		create_custom_editor(12, 4, 16, ["xx", "xy", "xz", "xo", "yx", "yy", "yz", "yo", "zx", "zy", "zz", "zo"])
-	elif type == TYPE_OBJECT: #or type == TYPE_IMAGE:
+	elif type == TYPE_OBJECT:
 		create_object_or_image()
 	else:
 		control = get_not_yet_supported()
@@ -225,7 +230,7 @@ func create_node_path():
 	control.connect("text_changed", self, "property_value_changed", [])
 
 # Adapted Port of property editor 
-func create_custom_editor(amount, columns, label_w, strings, read_only = false):
+func create_custom_editor(amount, columns, label_w, strings, read_only: = false):
 	self.value_editor = []
 	self.menu = PopupMenu.new()
 	menu.connect("popup_hide", self, "custom_editor_value_applied")
@@ -284,8 +289,11 @@ func custom_editor_value_applied():
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, value)
 		control.set_text(str(value))
-
-func get_custom_editor_value(index):
+"""
+This method return a specific value on a multiple entry item from the engine for
+editing.
+"""
+func get_custom_editor_value(index: int):
 	if type == TYPE_VECTOR2:
 		if index == 0: return value.x
 		else: return value.y
@@ -321,7 +329,13 @@ func get_custom_editor_value(index):
 		elif index == 9: return value.basis.z.y
 		elif index == 10: return value.basis.z.z
 		else: return value.origin.z
+"""
+Create a single table entry for a generic object, and generate a preview for 
+images.
 
+TODO: Maybe expands the preview for additional objects, like models, shaders and such?
+In that case, refactor the class to extract the preview method? (Possible FIXME)
+"""
 func create_object_or_image():
 	value = str(value)
 	control = HBoxContainer.new()
@@ -336,20 +350,23 @@ func create_object_or_image():
 			var texture_frame: = TextureRect.new()
 			var texture_hover: = PopupPanel.new()
 			var texture_popup: = TextureRect.new()
+			var texture_hide_timer: = Timer.new()
+			texture_hide_timer.set_one_shot(true)
 			texture_hover.visible = false
 			texture_frame.set_expand(true)
 			texture_popup.set_expand(true)
 			texture_frame.set_custom_minimum_size(Vector2(26, 26))
 			texture_frame.set_texture(texture)
 			texture_popup.set_texture(texture)
-			if (texture.get_size() > Vector2(int(config_prev_size_x), int(config_prev_size_y))):
-				texture_popup.set_custom_minimum_size(Vector2(int(config_prev_size_x), int(config_prev_size_y)))
+			if (texture.get_size() > Vector2(config_prev_size_x, config_prev_size_y)):
+				texture_popup.set_custom_minimum_size(Vector2(config_prev_size_x, config_prev_size_y))
 			else:
 				texture_popup.set_custom_minimum_size(texture.get_size())
 			texture_frame.set_process_input(true)
 			texture_hover.add_child(texture_popup)
-			texture_frame.connect("mouse_entered", self, "_on_popup_mouse_over", [texture_hover])
-			texture_frame.connect("mouse_exited", self, "_on_popup_mouse_exit", [texture_hover])
+			texture_hover.add_child(texture_hide_timer)
+			texture_frame.connect("mouse_entered", self, "_on_popup_mouse_over", [texture_hover, texture_hide_timer])
+			texture_frame.connect("mouse_exited", self, "_on_popup_mouse_exit", [texture_hover, texture_hide_timer])
 			control.add_child(texture_frame)
 			control.add_child(texture_hover)
 	control.add_child(object_type_line_edit)
@@ -433,16 +450,22 @@ func string_enum_property_value_changed(value):
 		self.value = value
 		emit_signal("on_property_value_changed", property_name, control.get_popup().get_item_text(value))
 
-func update_preview_sizes(size_x: int, size_y: int):
+func update_preview_sizes(size_x: int, size_y: int, timeout: float):
 	self.config_prev_size_x = size_x
 	self.config_prev_size_y = size_y
+	self.timer_timeout = timeout
 
 func open_image(texture):
 	print("I should open an image")
 
-func _on_popup_mouse_over(texture_hover):
-	texture_hover.visible = true
-	texture_hover.rect_position = get_viewport().get_mouse_position()
+func _on_popup_mouse_over(texture_hover: PopupPanel, timer: Timer):
+	if self.timer_timeout > 0:
+		texture_hover.visible = true
+		texture_hover.rect_position = get_viewport().get_mouse_position()
+		timer.start(self.timer_timeout)
 
-func _on_popup_mouse_exit(texture_hover):
-	texture_hover.visible = false
+func _on_popup_mouse_exit(texture_hover: PopupPanel, timer: Timer):
+	if self.timer_timeout > 0:
+		if timer.get_time_left() > 0:
+			yield(timer, "timeout")
+		texture_hover.visible = false

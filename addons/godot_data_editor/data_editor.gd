@@ -9,7 +9,7 @@ var all_items = {}
 
 signal data_item_class_opened(item_class)
 
-func _enter_tree():	
+func _enter_tree():
 	OS.set_low_processor_usage_mode(true)
 	name = "Data Editor"
 	# Currently, adding the singleton automatically, does not work
@@ -37,7 +37,6 @@ func _exit_tree():
 	#get_editor_interface().get_editor_viewport().remove_child(gui)
 	if gui:
 		gui.free()
-	var config = ConfigFile.new()
 	#var status = config.load("res://engine.cfg")
 	#if status == OK:
 	#	if not config.has_section_key("autoload", "data"):
@@ -45,12 +44,10 @@ func _exit_tree():
 	#		config.save("res://engine.cfg")
 			
 		# Check if the Classes and Data folders exist
-	ProjectSettings.clear("godot_data_editor/item_manager")
-	ProjectSettings.save()
 
 func _ready():
 	gui.connect("class_edit_requested", self, "edit_class", [])
-	ProjectSettings.set("debug_is_editor", true)
+	#ProjectSettings.set("debug_is_editor", true)
 
 # Opens the selected class in the Script Editor
 func edit_class(item_class):
@@ -73,12 +70,12 @@ func check_plugin_settings():
 	if status == OK:
 		if not config.has_section_key("custom", "class_directory"):
 			config.set_value("custom", "class_directory", "res://classes")
-			# TODO: Create folders	
+			# TODO: Create folders
 		if not config.has_section_key("custom", "extension"):
 			config.set_value("custom", "extension", "json")
 		if not config.has_section_key("custom", "output_directory"):
 			config.set_value("custom", "output_directory", "res://data")
-			# TODO: Create folders	
+			# TODO: Create folders
 		if not config.has_section_key("custom", "password"):
 			config.set_value("custom", "password", "")
 		if not config.has_section_key("custom", "sanitize_ids"):
