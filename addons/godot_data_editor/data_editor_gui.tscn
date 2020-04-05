@@ -449,11 +449,10 @@ __meta__ = {
 }
 
 [node name="OptionsDialog" parent="." instance=ExtResource( 20 )]
-visible = true
-margin_left = 366.0
-margin_top = 95.0
-margin_right = 766.0
-margin_bottom = 593.0
+margin_left = 358.0
+margin_top = 59.0
+margin_right = 758.0
+margin_bottom = 557.0
 
 [node name="InputDialog" parent="." instance=ExtResource( 21 )]
 margin_left = 401.0
@@ -520,6 +519,6 @@ __meta__ = {
 [connection signal="confirmed" from="NewClassDialog" to="." method="_on_NewClassDialog_confirmed"]
 [connection signal="file_selected" from="NewClassDialog/ClassIconFileDialog" to="." method="_on_NewClassIconFileDialog_file_selected"]
 [connection signal="button_down" from="NewClassDialog/VBoxContainer/HBoxContainer/NewClassIconSearchButton" to="." method="_on_NewClassIconSearchButton_button_down"]
-[connection signal="preview_parameters_changed" from="OptionsDialog" to="VBox/Body/Content/VBox/InstanceDetails/HBox/CustomProperties" method="_on_OptionsDialog_preview_parameters_changed"]
 [connection signal="preview_parameters_changed" from="OptionsDialog" to="VBox/Body/Content/VBox/InstanceDetails/HBox/ClassProperties" method="_on_OptionsDialog_preview_parameters_changed"]
+[connection signal="preview_parameters_changed" from="OptionsDialog" to="VBox/Body/Content/VBox/InstanceDetails/HBox/CustomProperties" method="_on_OptionsDialog_preview_parameters_changed"]
 [connection signal="confirmed" from="NewCustomPropertyDialog" to="." method="_on_NewCustomPropertyDialog_confirmed"]
