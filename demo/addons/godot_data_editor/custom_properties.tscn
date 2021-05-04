@@ -65,6 +65,7 @@ text = "There are no custom properties for this item. Click below to add one."
 margin_top = 560.0
 margin_right = 1004.0
 margin_bottom = 580.0
+focus_mode = 1
 text = "Add new custom property"
 
 [connection signal="button_down" from="Body/NewCustomPropertyButton" to="." method="_on_NewCustomPropertyButton_button_down"]
